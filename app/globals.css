@@ -1,0 +1,234 @@
+@import "tailwindcss";
+
+:root {
+  /* AnjMohi 60-30-10 Light Luxury Dental Palette */
+  /* 60% Dominant: #FFFFF0 Ivory Background */
+  --bg-deep: #FFFFF0;
+  --bg-surface: #FFFFFF;
+  --bg-card: rgba(255, 255, 255, 0.92);
+  --bg-card-solid: #FFFFFF;
+
+  /* 10% Accent / CTA: #00A89E */
+  --teal-primary: #00A89E;
+  --teal-cyan: #00A89E;
+  --teal-bright: #00C2B6;
+  --teal-light: #E6F7F5;
+  --teal-muted: rgba(0, 168, 158, 0.12);
+
+  /* 30% Secondary: Black Typography & Structure */
+  --text-pure: #111816;
+  --text-main: #111816;
+  --text-secondary: #4A5568;
+  --text-muted: #718096;
+
+  --border-dark: rgba(0, 0, 0, 0.08);
+  --border-glow: rgba(0, 168, 158, 0.25);
+  --border-active: rgba(0, 168, 158, 0.6);
+
+  --header-height-desktop: 76px;
+  --header-height-mobile: 68px;
+
+  --background: var(--bg-deep);
+  --foreground: var(--text-main);
+}
+
+@theme inline {
+  --color-bg-deep: var(--bg-deep);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-card: var(--bg-card);
+  --color-bg-card-solid: var(--bg-card-solid);
+  --color-teal-primary: var(--teal-primary);
+  --color-teal-cyan: var(--teal-cyan);
+  --color-teal-bright: var(--teal-bright);
+  --color-teal-light: var(--teal-light);
+  --color-teal-muted: var(--teal-muted);
+  --color-text-pure: var(--text-pure);
+  --color-text-main: var(--text-main);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-border-dark: var(--border-dark);
+  --color-border-glow: var(--border-glow);
+  --color-border-active: var(--border-active);
+
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+}
+
+html {
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar — Light Ivory & Teal */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--teal-cyan);
+}
+
+/* Base typography */
+h1,
+h2,
+h3,
+h4,
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Focus styling */
+*:focus-visible {
+  outline: 2px solid var(--teal-cyan);
+  outline-offset: 4px;
+}
+
+/* GPU-accelerated transforms */
+.will-transform {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Premium Layout Container */
+.container-editorial {
+  width: 100%;
+  max-width: 1380px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-editorial {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+/* Teal Gradient Text */
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #00A89E 0%, #00C2B6 50%, #008C84 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Light Glass Panel */
+.glass-panel-dark {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.04);
+}
+
+.glass-panel-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.glass-panel-card:hover {
+  border-color: rgba(0, 168, 158, 0.4);
+  box-shadow: 0 12px 36px rgba(0, 168, 158, 0.12);
+}
+
+/* Glowing border */
+.border-glow-subtle {
+  border: 1px solid rgba(0, 168, 158, 0.25);
+}
+
+/* Subtle gradient badge */
+.badge-teal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--teal-primary);
+}
+
+/* Section scroll offset */
+[id] {
+  scroll-margin-top: 80px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   Scroll Stack Panel System
+   Each <SectionStack> is sticky and stacks above the previous.
+   GSAP animates scale + opacity + y on the exiting panel.
+   ───────────────────────────────────────────────────────── */
+.section-stack-panel {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-origin: 50% 0%;
+  isolation: isolate;
+}
+
+/* Scroll glider airplane animation */
+@keyframes glidePlane {
+  0% {
+    left: 0%;
+    opacity: 0;
+    transform: translateY(-50%) scale(0.9);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+  100% {
+    left: calc(100% - 190px);
+    opacity: 0.9;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+.animate-glide-plane {
+  animation: glidePlane 12s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
