@@ -171,8 +171,9 @@ export default function PatientConcerns() {
       className="py-16 sm:py-20 lg:py-24 relative z-10 select-none"
     >
       <div className="container-editorial w-full" onMouseLeave={handleMouseLeaveSection}>
-        {/* 1. Section Header: Spans above the interactive area */}
-        <div className="flex flex-col items-start gap-3 mb-8 sm:mb-10 max-w-3xl">
+        <div className="container-inner">
+          {/* 1. Section Header: Spans above the interactive area */}
+          <div className="flex flex-col items-start gap-3 mb-8 sm:mb-10 max-w-3xl">
           <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#00A89E] block">
             PATIENT CARE GUIDE
           </span>
@@ -364,6 +365,7 @@ export default function PatientConcerns() {
             </div>
           </div>
 
+        </div>
         </div>
       </div>
     </section>

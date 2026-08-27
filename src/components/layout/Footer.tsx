@@ -15,8 +15,9 @@ export default function Footer() {
   return (
     <footer className="bg-[#F8F8EE] text-[#111816] border-t border-black/8 py-16 relative z-20">
       <div className="container-editorial">
-        {/* Top row: Brand + Nav */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-14">
+        <div className="container-inner">
+          {/* Top row: Brand + Nav */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-14">
           
           {/* Brand Column */}
           <div className="md:col-span-4 flex flex-col gap-4">
@@ -96,6 +97,7 @@ export default function Footer() {
             <a href="#" className="hover:text-[#00A89E] transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-[#00A89E] transition-colors">Terms of Service</a>
           </div>
+        </div>
         </div>
       </div>
     </footer>

@@ -11,7 +11,8 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <div className="pt-24 pb-24 relative bg-ivory min-h-screen z-10">
-      <div className="container-editorial flex flex-col gap-16">
+      <div className="container-editorial">
+        <div className="container-inner flex flex-col gap-16">
         
         {/* Intro */}
         <div className="max-w-3xl">
@@ -47,6 +48,7 @@ export default function AboutPage() {
         {/* Doctors Grid Section */}
         <DoctorsGrid />
 
+        </div>
       </div>
     </div>
   );

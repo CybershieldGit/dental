@@ -25,9 +25,9 @@ export default function DentalTourismPage() {
   return (
     <div className="pt-24 pb-28 relative bg-ivory min-h-screen z-10">
       <div className="container-editorial w-full">
-        
-        {/* Concierge Hero: Asymmetric Split Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center mb-20">
+        <div className="container-inner">
+          {/* Concierge Hero: Asymmetric Split Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center mb-20">
           
           {/* Left Column */}
           <div className="lg:col-span-7 flex flex-col items-start z-10">
@@ -104,6 +104,7 @@ export default function DentalTourismPage() {
           </div>
         </div>
 
+        </div>
       </div>
     </div>
   );

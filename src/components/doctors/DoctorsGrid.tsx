@@ -59,8 +59,9 @@ export default function DoctorsGrid() {
   return (
     <section ref={sectionRef} id="doctors" className="py-20 md:py-28 relative z-10">
       <div className="container-editorial">
-        {/* Header */}
-        <div className="doctors-header text-center mb-14">
+        <div className="container-inner">
+          {/* Header */}
+          <div className="doctors-header text-center mb-14">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#00A89E] block mb-3">
             Meet the Experts
           </span>
@@ -108,6 +109,7 @@ export default function DoctorsGrid() {
               </div>
             </div>
           ))}
+        </div>
         </div>
       </div>
     </section>

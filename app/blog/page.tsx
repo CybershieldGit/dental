@@ -47,8 +47,9 @@ export default function BlogPage() {
   return (
     <div ref={pageRef} className="min-h-screen py-8 md:py-16 relative z-10">
       <div className="container-editorial">
-        {/* Back link */}
-        <Link
+        <div className="container-inner">
+          {/* Back link */}
+          <Link
           href="/"
           className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-teal transition-colors mb-8 group"
         >
@@ -116,6 +117,7 @@ export default function BlogPage() {
               </div>
             </Link>
           ))}
+        </div>
         </div>
       </div>
     </div>

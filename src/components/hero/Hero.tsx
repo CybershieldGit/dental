@@ -44,12 +44,12 @@ export default function Hero() {
         className="relative w-full min-h-screen flex flex-col justify-center pt-20 sm:pt-24 lg:pt-24 pb-8 sm:pb-10 z-10 select-none text-[#111816]"
       >
         {/* Full-Width Expansive Container (Matching Reference Edge-to-Edge Breathing Room) */}
-        <div className="w-full max-w-[1740px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 flex-1 flex flex-col justify-center my-auto">
+        <div className="container-editorial flex-1 flex flex-col justify-center my-auto">
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 xl:gap-12 items-center min-h-[580px] lg:min-h-[660px]">
             
             {/* Left Column: Heading, Subtitle, CTA, and Feature Metrics */}
-            <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-between h-full py-2 sm:py-4 lg:py-6 pl-0 sm:pl-2 lg:pl-4">
+            <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-between h-full py-2 sm:py-4 lg:py-6">
               
               {/* Top / Middle Typography Block */}
               <div className="flex flex-col items-start my-auto">

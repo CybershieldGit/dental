@@ -70,11 +70,11 @@ export default function BlogSection() {
   const activeBlog = blogsList[activeBlogIdx];
 
   return (
-    <section id="journal" className="py-20 md:py-28 relative z-10 border-t border-black/5 bg-[#FFFFF0]/40">
-      <div className="w-full max-w-[1740px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 pr-6 sm:pr-8 lg:pr-16 xl:pr-20">
-        
-        {/* Section Header: Matches Wireframe "blogs" banner */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 sm:mb-12 max-w-3xl pl-0 sm:pl-2 lg:pl-4">
+    <section id="journal" className="min-h-screen flex flex-col justify-center py-10 sm:py-14 lg:py-16 relative z-10 border-t border-black/5 bg-[#FFFFF0]/40">
+      <div className="container-editorial my-auto">
+        <div className="container-inner">
+          {/* Section Header: Matches Wireframe "blogs" banner */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 sm:mb-12 max-w-3xl">
           <div>
             <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#00A89E] block mb-2">
               DENTAL JOURNAL & INSIGHTS
@@ -245,6 +245,7 @@ export default function BlogSection() {
 
         </div>
 
+        </div>
       </div>
     </section>
   );

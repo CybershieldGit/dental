@@ -143,11 +143,11 @@ export default function TreatmentNavigator() {
   };
 
   return (
-    <section id="treatments" className="py-20 md:py-28 relative z-10 border-t border-black/5">
-      <div className="container-editorial w-full">
-        
-        {/* Header */}
-        <div className="mb-10">
+    <section id="treatments" className="min-h-screen flex flex-col justify-center py-10 sm:py-14 lg:py-16 relative z-10 border-t border-black/5">
+      <div className="container-editorial w-full my-auto">
+        <div className="container-inner">
+          {/* Header */}
+          <div className="mb-10">
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#00A89E] block mb-2">
             TREATMENT NAVIGATOR
           </span>
@@ -232,8 +232,8 @@ export default function TreatmentNavigator() {
             <span>View All Treatments</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </a>
+          </div>
         </div>
-
       </div>
     </section>
   );

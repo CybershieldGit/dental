@@ -27,6 +27,7 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
   const heroContentRef = useRef<HTMLDivElement>(null);
   const heroLeftCtaRef = useRef<HTMLDivElement>(null);
   const heroCardSlotRef = useRef<HTMLDivElement>(null);
+  const mobileCardSlotRef = useRef<HTMLDivElement>(null);
   const expandingImageWrapperRef = useRef<HTMLDivElement>(null);
   const imageOverlayRef = useRef<HTMLDivElement>(null);
   const floatingBadgeRef = useRef<HTMLDivElement>(null);
@@ -148,61 +149,63 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
   useEffect(() => {
     if (!triggerContainerRef.current) return;
 
-    const ctx = gsap.context(() => {
-      // Function to calculate exact slot offsets relative to trigger container
-      const getSlotMetrics = () => {
-        if (!heroCardSlotRef.current || !triggerContainerRef.current) return null;
-        const slotRect = heroCardSlotRef.current.getBoundingClientRect();
-        const parentRect = triggerContainerRef.current.getBoundingClientRect();
+    let ctx: gsap.Context;
 
-        return {
-          top: slotRect.top - parentRect.top,
-          left: slotRect.left - parentRect.left,
-          width: slotRect.width,
-          height: slotRect.height,
+    const setupAnimations = () => {
+      ctx = gsap.context(() => {
+        // Calculate slot metrics and set as CSS custom properties
+        const updateMetrics = () => {
+          if (!triggerContainerRef.current || !expandingImageWrapperRef.current) return;
+          
+          const isMobile = window.innerWidth < 1024;
+          const activeSlot = (isMobile && mobileCardSlotRef.current) ? mobileCardSlotRef.current : heroCardSlotRef.current;
+          if (!activeSlot) return;
+
+          const slotRect = activeSlot.getBoundingClientRect();
+          const parentRect = triggerContainerRef.current.getBoundingClientRect();
+
+          const top = slotRect.top - parentRect.top;
+          const left = slotRect.left - parentRect.left;
+          const width = slotRect.width;
+          const height = slotRect.height;
+          const borderRadius = isMobile ? "28px" : "36px";
+
+          gsap.set(expandingImageWrapperRef.current, {
+            top,
+            left,
+            width,
+            height,
+            borderRadius,
+            position: "absolute",
+            zIndex: 10,
+          });
         };
-      };
 
-      // Set initial styles for the expanding image to match hero slot metrics
-      const initMetrics = getSlotMetrics();
-      if (initMetrics) {
-        gsap.set(expandingImageWrapperRef.current, {
-          top: initMetrics.top,
-          left: initMetrics.left,
-          width: initMetrics.width,
-          height: initMetrics.height,
-          borderRadius: "36px",
-          position: "absolute",
-          zIndex: 10,
-        });
-      }
+        updateMetrics();
 
-      // Initial physical translation states with subtle soft alpha
+      // Initial physical translation states
       gsap.set(expandingImageWrapperRef.current, { y: 140, opacity: 0 });
       gsap.set(heroLeftCtaRef.current, { x: -40, opacity: 0 });
       gsap.set(floatingBadgeRef.current, { y: 60, opacity: 0, scale: 0.95 });
-      // Contact CTA stays visibility:hidden until its entrance moment in timeline
       gsap.set(floatingContactRef.current, { y: 60, opacity: 0, scale: 0.95 });
 
-      // Section 2 initial state (safe to set now — no scroll conflict)
+      // Section 2 initial state
       gsap.set(diagHeaderRef.current, { opacity: 0, y: 30 });
       gsap.set(diagCardsRef.current?.children || [], { opacity: 0, y: 25, scale: 0.98 });
       gsap.set(diagShowcaseRef.current, { opacity: 0, y: 30, scale: 0.97 });
 
-      // ── STEP 1: Entrance Animation (plays once on page load) ──
+      // ── STEP 1: Entrance Animation ──
       const entranceTl = gsap.timeline({
         delay: 0.15,
         defaults: { ease: "power3.out" },
       });
 
       entranceTl
-        // 1. Hero image glides up fluidly
         .to(expandingImageWrapperRef.current, {
           y: 0,
           opacity: 1,
           duration: 1.4,
         })
-        // Left CTA enters alongside
         .to(
           heroLeftCtaRef.current,
           {
@@ -212,7 +215,6 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           },
           "-=1.0"
         )
-        // 2. Care Feature Card: subtle, elegant float and fade-in from bottom
         .fromTo(
           floatingBadgeRef.current,
           {
@@ -229,7 +231,6 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           },
           "-=0.9"
         )
-        // 3. Contact CTA: flip visibility right at this timeline moment, then glide up
         .set(floatingContactRef.current, { visibility: "visible" }, "-=1.1")
         .fromTo(
           floatingContactRef.current,
@@ -249,9 +250,10 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           "-=1.1"
         );
 
-      // ── STEP 2: Scroll Scrub Timeline with immediateRender: false ──
+      // ── STEP 2: Scroll Scrub Timeline ──
       const tl = gsap.timeline({
         scrollTrigger: {
+          id: "hero-pin-trigger",
           trigger: triggerContainerRef.current,
           start: "top top",
           end: "+=260%",
@@ -259,11 +261,16 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           scrub: 0.6,
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          onRefreshInit: () => {
+            const progress = ScrollTrigger.getById("hero-pin-trigger")?.progress || 0;
+            if (progress < 0.05) {
+              updateMetrics();
+            }
+          },
         },
       });
 
-      // PHASE 1: Hero Image expands to viewport & ALL Hero components dissolve completely
-      // 1. Subtle, elegant fade out and drift for the Contact CTA and Care Feature Card
+      // PHASE 1: Hero Image expands from hero slot into full viewport background & Hero text fades
       tl.fromTo(
         floatingContactRef.current,
         { opacity: 1, y: 0, scale: 1 },
@@ -301,7 +308,6 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
         },
         0
       )
-      // 2. Dissolve main typography and hero text
       .fromTo(
         "#hero",
         { opacity: 1, y: 0 },
@@ -319,8 +325,8 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
         {
           top: 0,
           left: 0,
-          width: "100vw",
-          height: "100vh",
+          width: "100%",
+          height: "100%",
           borderRadius: "0px",
           duration: 1.8,
           ease: "power2.inOut",
@@ -393,9 +399,26 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           }
         );
 
-    }, triggerContainerRef);
+      }, triggerContainerRef);
+    };
 
-    return () => ctx.revert();
+    setupAnimations();
+
+    let resizeTimer: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(resizeTimer);
+      if (ctx) ctx.revert();
+    };
   }, []);
 
   const handleBookClick = () => {
@@ -469,134 +492,147 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           ───────────────────────────────────────────────────────── */}
       <section
         id="hero"
-        className="absolute inset-0 w-full h-full flex flex-col justify-center pt-20 sm:pt-24 lg:pt-24 pb-8 sm:pb-10 z-20 pointer-events-auto"
+        className="absolute inset-0 w-full h-full flex flex-col justify-center pt-[54px] sm:pt-24 lg:pt-24 pb-4 sm:pb-8 lg:pb-10 z-20 pointer-events-auto"
       >
-        <div className="w-full max-w-[1740px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 pr-6 sm:pr-8 lg:pr-16 xl:pr-20 flex-1 flex flex-col justify-center my-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 xl:gap-12 items-center min-h-[580px] lg:min-h-[660px]">
-            
-            {/* Left Column: Heading, Subtitle, CTA, and Feature Metrics */}
-            <div
-              ref={heroContentRef}
-              className="lg:col-span-6 xl:col-span-6 flex flex-col justify-between h-full py-2 sm:py-4 lg:py-6 pl-0 sm:pl-2 lg:pl-4"
-            >
-              {/* Top / Middle Typography Block */}
-              <div className="flex flex-col items-start my-auto">
-                <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#00A89E] mb-3 sm:mb-4 block">
-                  ADVANCED DENTAL CARE
-                </span>
-
-                <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[70px] xl:text-[80px] font-serif text-[#111816] font-medium leading-[1.05] tracking-tight">
-                  Caring for Your <br />
-                  <span className="italic font-medium text-[#00A89E]">Smile,</span> One Visit <br />
-                  at a Time.
-                </h1>
-
-                <p className="text-base sm:text-lg md:text-[19px] text-[#4A5568] font-sans font-normal leading-relaxed max-w-[500px] mt-5 sm:mt-6">
-                  Your smile is more than just an expression, it&apos;s a reflection of your confidence, health, and happiness.
-                </p>
-
-                {/* CTA Pill Button */}
-                <div
-                  ref={heroLeftCtaRef}
-                  className="mt-8 sm:mt-10"
-                >
-                  <button
-                    onClick={handleBookClick}
-                    className="px-8 sm:px-9 py-4 min-h-[54px] sm:min-h-[58px] bg-[#111816] hover:bg-[#00A89E] text-white text-sm sm:text-base font-semibold rounded-full transition-all duration-300 inline-flex items-center justify-center gap-3 cursor-pointer shadow-[0_6px_22px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_30px_rgba(0,168,158,0.4)] hover:-translate-y-0.5 group"
-                  >
-                    <span>Set Appointment</span>
-                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Bottom Feature Stats Strip */}
-              <div className="w-full pt-8 sm:pt-10 border-t border-black/10 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-4 lg:gap-6 mt-8 sm:mt-12">
-                {featureItems.map((item, idx) => {
-                  const Icon = item.icon;
-                  return (
-                    <div
-                      key={idx}
-                      className={`flex items-center gap-2.5 ${
-                        idx > 0 ? "sm:border-l sm:border-black/10 sm:pl-3 lg:pl-4" : ""
-                      }`}
-                    >
-                      <div className="p-1.5 sm:p-2 rounded-lg bg-[#E6F7F5] text-[#00A89E] flex-shrink-0">
-                        <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                      </div>
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-xs sm:text-[13px] font-bold text-[#111816] uppercase tracking-tight leading-tight whitespace-nowrap">
-                          {item.stat}
-                        </span>
-                        <span className="text-[10px] sm:text-[11px] text-[#5A6B66] font-medium leading-tight mt-0.5 whitespace-nowrap">
-                          {item.label}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Right Column: Hero Visual Card Slot & Floating Pill Components */}
-            <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center h-full pl-0 sm:pl-2 lg:pl-4 xl:pl-6 relative">
+        <div className="container-editorial flex-1 flex flex-col justify-center my-auto">
+          <div className="container-inner flex-1 flex flex-col justify-center my-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 xl:gap-12 items-center min-h-0 lg:min-h-[500px] xl:min-h-[600px]">
+              
+              {/* Left Column: Heading, Subtitle, CTA, and Feature Metrics */}
               <div
-                ref={heroCardSlotRef}
-                className="relative w-full h-[520px] sm:h-[600px] lg:h-full min-h-[520px] lg:min-h-[660px] translate-x-1 sm:translate-x-3 lg:translate-x-5 xl:translate-x-7"
+                ref={heroContentRef}
+                className="lg:col-span-6 xl:col-span-6 flex flex-col justify-between h-full min-h-[500px] xs:min-h-[540px] sm:min-h-[580px] lg:min-h-0 py-2 sm:py-4 lg:py-6"
               >
-                {/* 1. Independent Contact CTA Pill Component (glides up with hero image) */}
-                <div
-                  ref={floatingContactRef}
-                  className="absolute top-5 sm:top-6 right-5 sm:right-6 z-30 pointer-events-auto will-change-[transform,opacity]"
-                  style={{ opacity: 0, visibility: "hidden" }}
-                >
-                  <button
-                    onClick={handleBookClick}
-                    className="px-5 sm:px-6 py-2.5 rounded-full bg-white/95 hover:bg-white text-[#111816] hover:text-[#00A89E] backdrop-blur-md border border-black/5 text-xs sm:text-sm font-semibold shadow-[0_4px_16px_rgba(0,0,0,0.08)] flex items-center gap-1.5 transition-all duration-300 hover:scale-105 cursor-pointer"
+                {/* Top / Middle Typography Block + Mobile Inline Image (Reference Match) */}
+                <div className="flex flex-col items-start my-auto w-full relative">
+                  <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#00A89E] mb-1.5 sm:mb-4 block">
+                    ADVANCED DENTAL CARE
+                  </span>
+
+                  {/* Mobile Row: Headline + Subtitle on Left, Image Card on Right */}
+                  <div className="flex items-start justify-between gap-3.5 sm:gap-4 w-full">
+                    <div className="flex-1 flex flex-col max-w-[215px] sm:max-w-[500px]">
+                      <h1 className="text-[30px] xs:text-[34px] sm:text-4xl md:text-5xl lg:text-6xl xl:text-[70px] 2xl:text-[80px] font-serif text-[#111816] font-medium leading-[1.08] sm:leading-[1.05] tracking-tight">
+                        Caring for Your <br />
+                        <span className="italic font-medium text-[#00A89E]">Smile,</span> One Visit <br />
+                        at a Time.
+                      </h1>
+
+                      <p className="text-[13px] xs:text-[14px] sm:text-base md:text-[19px] text-[#4A5568] font-sans font-normal leading-snug sm:leading-relaxed mt-3 sm:mt-6">
+                        Your smile is more than just an expression, it&apos;s a reflection of your confidence, health, and happiness.
+                      </p>
+                    </div>
+
+                    {/* Mobile-only tall rounded hero image card slot */}
+                    <div
+                      ref={mobileCardSlotRef}
+                      className="lg:hidden w-[136px] xs:w-[146px] sm:w-[170px] h-[182px] xs:h-[196px] sm:h-[215px] rounded-[30px] overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.15)] border-2 border-white flex-shrink-0 relative bg-[#F3F4F1] mt-0.5 opacity-0"
+                    />
+                  </div>
+
+                  {/* CTA Pill Button */}
+                  <div
+                    ref={heroLeftCtaRef}
+                    className="mt-6 sm:mt-8 lg:mt-10"
                   >
-                    <span>Contact</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  </button>
-                </div>
-
-                {/* 2. Independent Care Feature Card Component (slides in from bottom to up) */}
-                <div
-                  ref={floatingBadgeRef}
-                  className="absolute top-[35%] left-5 sm:left-7 z-30 max-w-[210px] sm:max-w-[230px] rounded-2xl bg-white/80 backdrop-blur-xl border border-white/80 p-4 shadow-[0_16px_36px_rgba(0,0,0,0.12)] transition-transform duration-500 hover:scale-105 opacity-0 will-change-[transform,opacity]"
-                >
-                  <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-black/10">
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-[#EF4444]/80" />
-                      <span className="w-2 h-2 rounded-full bg-[#F59E0B]/80" />
-                      <span className="w-2 h-2 rounded-full bg-[#10B981]/80" />
-                    </div>
-                    <span className="text-[10px] font-semibold text-[#5A6B66] uppercase tracking-wider">
-                      Care Feature
-                    </span>
-                  </div>
-
-                  <h4 className="text-sm font-serif font-bold text-[#111816] leading-tight">
-                    Glowing Smile
-                  </h4>
-                  <p className="text-[11px] text-[#5A6B66] mt-0.5 font-medium">
-                    Laser Tech & Whitening
-                  </p>
-
-                  <div className="grid grid-cols-2 gap-2 mt-3 pt-2.5 border-t border-black/5">
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-[#718096] uppercase font-medium">Treatment</span>
-                      <span className="text-[11px] font-bold text-[#111816]">Painless</span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] text-[#718096] uppercase font-medium">Comfort</span>
-                      <span className="text-[11px] font-bold text-[#111816]">Boutique</span>
-                    </div>
+                    <button
+                      onClick={handleBookClick}
+                      className="px-6 sm:px-9 py-3.5 sm:py-4 min-h-[50px] sm:min-h-[58px] bg-[#111816] hover:bg-[#00A89E] text-white text-xs sm:text-base font-semibold rounded-full transition-all duration-300 inline-flex items-center justify-center gap-2.5 sm:gap-3 cursor-pointer shadow-[0_6px_22px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_30px_rgba(0,168,158,0.4)] hover:-translate-y-0.5 group"
+                    >
+                      <span>Set Appointment</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </button>
                   </div>
                 </div>
 
+                {/* Bottom Feature Stats Strip (Reference Style with rounded icon boxes) */}
+                <div className="w-full pt-5 sm:pt-8 lg:pt-10 border-t border-black/8 grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-4 lg:gap-6 mt-7 sm:mt-8 lg:mt-12">
+                  {featureItems.map((item, idx) => {
+                    const Icon = item.icon;
+                    return (
+                      <div
+                        key={idx}
+                        className={`flex items-center gap-2.5 sm:gap-2.5 ${
+                          idx > 0 ? "sm:border-l sm:border-black/10 sm:pl-3 lg:pl-4" : ""
+                        }`}
+                      >
+                        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#E6F7F5] text-[#00A89E] flex items-center justify-center flex-shrink-0">
+                          <Icon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-[11.5px] sm:text-[13px] font-bold text-[#111816] uppercase tracking-tight leading-tight whitespace-nowrap">
+                            {item.stat}
+                          </span>
+                          <span className="text-[9.5px] sm:text-[11px] text-[#5A6B66] font-medium leading-tight mt-0.5 whitespace-nowrap">
+                            {item.label}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
 
+              {/* Right Column: Hero Visual Card Slot & Floating Pill Components (Desktop / Tablet) */}
+              <div className="hidden lg:flex lg:col-span-6 xl:col-span-6 flex-col justify-center h-full relative">
+                <div
+                  ref={heroCardSlotRef}
+                  className="relative w-full h-[520px] sm:h-[600px] lg:h-full min-h-[520px] lg:min-h-[500px] xl:min-h-[600px]"
+                >
+                  {/* 1. Independent Contact CTA Pill Component */}
+                  <div
+                    ref={floatingContactRef}
+                    className="absolute top-5 sm:top-6 right-5 sm:right-6 z-30 pointer-events-auto will-change-[transform,opacity]"
+                    style={{ opacity: 0, visibility: "hidden" }}
+                  >
+                    <button
+                      onClick={handleBookClick}
+                      className="px-5 sm:px-6 py-2.5 rounded-full bg-white/95 hover:bg-white text-[#111816] hover:text-[#00A89E] backdrop-blur-md border border-black/5 text-xs sm:text-sm font-semibold shadow-[0_4px_16px_rgba(0,0,0,0.08)] flex items-center gap-1.5 transition-all duration-300 hover:scale-105 cursor-pointer"
+                    >
+                      <span>Contact</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    </button>
+                  </div>
+
+                  {/* 2. Independent Care Feature Card Component */}
+                  <div
+                    ref={floatingBadgeRef}
+                    className="absolute top-[35%] left-5 sm:left-7 z-30 max-w-[210px] sm:max-w-[230px] rounded-2xl bg-white/80 backdrop-blur-xl border border-white/80 p-4 shadow-[0_16px_36px_rgba(0,0,0,0.12)] transition-transform duration-500 hover:scale-105 opacity-0 will-change-[transform,opacity]"
+                  >
+                    <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-black/10">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-[#EF4444]/80" />
+                        <span className="w-2 h-2 rounded-full bg-[#F59E0B]/80" />
+                        <span className="w-2 h-2 rounded-full bg-[#10B981]/80" />
+                      </div>
+                      <span className="text-[10px] font-semibold text-[#5A6B66] uppercase tracking-wider">
+                        Care Feature
+                      </span>
+                    </div>
+
+                    <h4 className="text-sm font-serif font-bold text-[#111816] leading-tight">
+                      Glowing Smile
+                    </h4>
+                    <p className="text-[11px] text-[#5A6B66] mt-0.5 font-medium">
+                      Laser Tech & Whitening
+                    </p>
+
+                    <div className="grid grid-cols-2 gap-2 mt-3 pt-2.5 border-t border-black/5">
+                      <div className="flex flex-col">
+                        <span className="text-[9px] text-[#718096] uppercase font-medium">Treatment</span>
+                        <span className="text-[11px] font-bold text-[#111816]">Painless</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[9px] text-[#718096] uppercase font-medium">Comfort</span>
+                        <span className="text-[11px] font-bold text-[#111816]">Boutique</span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       </section>
@@ -606,34 +642,35 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           ───────────────────────────────────────────────────────── */}
       <section
         id="diagnostics"
-        className="absolute inset-0 w-full h-full flex flex-col justify-center pt-20 sm:pt-24 lg:pt-24 pb-8 sm:pb-10 z-20 pointer-events-none"
+        className="absolute inset-0 w-full h-full flex flex-col justify-center pt-24 sm:pt-28 lg:pt-24 pb-6 sm:pb-8 lg:pb-10 z-20 pointer-events-none"
       >
         <div
-          className="w-full max-w-[1740px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 pr-6 sm:pr-8 lg:pr-16 xl:pr-20 flex-1 flex flex-col justify-center my-auto"
+          className="container-editorial flex-1 flex flex-col justify-center my-auto"
           onMouseLeave={handleMouseLeaveSection}
         >
-          {/* Section Header: Spans the top of Section 2 with matching Hero left padding */}
-          <div ref={diagHeaderRef} className="flex flex-col items-start gap-2 mb-4 sm:mb-6 max-w-3xl pl-0 sm:pl-2 lg:pl-4">
-            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#00A89E] block">
+          <div className="container-inner flex-1 flex flex-col justify-center my-auto">
+            {/* Section Header: Spans the top of Section 2 with matching Hero left padding */}
+            <div ref={diagHeaderRef} className="flex flex-col items-start gap-1 sm:gap-2 mb-3 sm:mb-6 max-w-3xl">
+            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#00A89E] block">
               PATIENT CARE GUIDE
             </span>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-[44px] xl:text-[48px] font-serif text-[#111816] font-medium leading-[1.08] tracking-tight">
+            <h2 className="text-2xl sm:text-4xl lg:text-[44px] xl:text-[48px] font-serif text-[#111816] font-medium leading-[1.1] sm:leading-[1.08] tracking-tight">
               What brings you <span className="italic font-medium text-[#00A89E]">to our clinic today?</span>
             </h2>
 
-            <p className="text-sm sm:text-base md:text-[17px] text-[#4A5568] font-sans font-normal leading-relaxed max-w-xl">
+            <p className="text-xs sm:text-base md:text-[17px] text-[#4A5568] font-sans font-normal leading-relaxed max-w-xl hidden sm:block">
               Choose your primary concern below. We&apos;ll match you with the right specialist and prepare a gentle, personalized care plan.
             </p>
           </div>
 
           {/* Interactive 12-Column Grid: 6 Left Cards + Right Treatment Showcase Card */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 xl:gap-12 items-stretch min-h-[460px] lg:min-h-[500px]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 xl:gap-12 items-stretch min-h-0 lg:min-h-[500px]">
             
             {/* Left Column: 6 Cards Stack (Matching Hero Left Column Grid Span & Padding) */}
             <div
               ref={diagCardsRef}
-              className="lg:col-span-6 xl:col-span-6 flex flex-col justify-between gap-2.5 w-full pl-0 sm:pl-2 lg:pl-4"
+              className="lg:col-span-6 xl:col-span-6 flex flex-col justify-between gap-2 sm:gap-2.5 w-full"
             >
               {concerns.map((item, idx) => {
                 const Icon = item.icon;
@@ -644,7 +681,7 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
                     key={item.id}
                     onClick={() => handleRowClick(item)}
                     onMouseEnter={() => handleMouseEnterCard(idx)}
-                    className={`relative w-full py-3 sm:py-3.5 px-4 sm:px-5 rounded-2xl border text-left flex items-center justify-between gap-4 transition-all duration-300 cursor-pointer overflow-hidden ${
+                    className={`relative w-full py-2.5 sm:py-3.5 px-3.5 sm:px-5 rounded-xl sm:rounded-2xl border text-left flex items-center justify-between gap-3 sm:gap-4 transition-all duration-300 cursor-pointer overflow-hidden ${
                       isActive
                         ? "bg-white border-[#00A89E] shadow-[0_8px_24px_rgba(0,168,158,0.16)] ring-1 ring-[#00A89E]/40 translate-x-1"
                         : "bg-white/95 backdrop-blur-md border-black/8 hover:border-[#00A89E]/40 hover:bg-white shadow-xs"
@@ -657,26 +694,26 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
                       />
                     )}
 
-                    <div className="flex items-center gap-3.5 min-w-0">
+                    <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
                       <div
-                        className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${
+                        className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${
                           isActive
                             ? "bg-[#00A89E] text-white shadow-[0_4px_12px_rgba(0,168,158,0.3)]"
                             : "bg-[#E6F7F5] text-[#00A89E]"
                         }`}
                       >
-                        <Icon className="w-4 h-4" />
+                        <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </div>
 
                       <div className="flex flex-col min-w-0">
                         <span
-                          className={`text-sm sm:text-base font-serif font-semibold tracking-tight transition-colors duration-200 truncate ${
+                          className={`text-xs sm:text-base font-serif font-semibold tracking-tight transition-colors duration-200 truncate ${
                             isActive ? "text-[#00A89E]" : "text-[#111816]"
                           }`}
                         >
                           {item.title}
                         </span>
-                        <span className="text-xs sm:text-[13px] text-[#5A6B66] font-normal mt-0.5 truncate">
+                        <span className="text-[10px] sm:text-[13px] text-[#5A6B66] font-normal mt-0.5 truncate">
                           {item.subtitle}
                         </span>
                       </div>
@@ -689,7 +726,7 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
                         </span>
                       )}
                       <ChevronRight
-                        className={`w-4 h-4 transition-all duration-300 ${
+                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-all duration-300 ${
                           isActive ? "text-[#00A89E] translate-x-1" : "text-[#A0AEC0]"
                         }`}
                       />
@@ -699,10 +736,10 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
               })}
             </div>
 
-            {/* Right Column: Treatment Showcase Card (Right-aligned with compact width for breathing space) */}
+            {/* Right Column: Treatment Showcase Card (Desktop / Tablet) */}
             <div
               ref={diagShowcaseRef}
-              className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center h-full pr-0 sm:pr-2 lg:pr-4 xl:pr-6"
+              className="hidden lg:flex lg:col-span-6 xl:col-span-6 flex-col justify-center h-full"
             >
               <div className="bg-white/95 backdrop-blur-md rounded-[28px] sm:rounded-[32px] border border-black/10 shadow-[0_16px_40px_rgba(0,0,0,0.06)] p-5 sm:p-6 flex flex-col justify-between h-full w-full max-w-[490px] xl:max-w-[510px] ml-auto">
                 
@@ -801,7 +838,8 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
 
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
       {/* ─────────────────────────────────────────────────────────
           SECTION 3 — OVERLAP PANEL (Children)

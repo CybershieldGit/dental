@@ -29,9 +29,9 @@ export default function SavingsCalculator() {
   return (
     <section id="savings-calculator" className="py-20 md:py-28 relative bg-paper">
       <div className="container-editorial w-full">
-        
-        {/* Editorial Header */}
-        <div className="max-w-2xl mb-12">
+        <div className="container-inner">
+          {/* Editorial Header */}
+          <div className="max-w-2xl mb-12">
           <span className="text-xs font-semibold uppercase tracking-widest text-clinical-green block mb-2">
             MEMBERSHIP CARE & PRICING
           </span>
@@ -126,7 +126,7 @@ export default function SavingsCalculator() {
           </div>
 
         </div>
-
+        </div>
       </div>
     </section>
   );

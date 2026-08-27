@@ -97,35 +97,38 @@ export default function BookingOverlay() {
   const timeSlots = ["10:00 AM", "11:30 AM", "02:00 PM", "04:30 PM"];
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
-      {/* Backdrop */}
+    <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6 lg:p-8 pointer-events-auto">
+      {/* Editorial Blurred Backdrop */}
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-500"
+        className="fixed inset-0 bg-[#111816]/60 backdrop-blur-md transition-opacity duration-300"
         onClick={closeOverlay}
       />
 
-      {/* Main Drawer Shell */}
+      {/* Luxury Editorial Modal Card */}
       <div
         ref={containerRef}
         tabIndex={-1}
-        className="relative w-full max-w-[600px] h-full bg-[#FFFFF0] text-[#111816] shadow-2xl flex flex-col justify-between overflow-y-auto focus:outline-none"
+        className="relative w-full max-w-[620px] max-h-[85vh] bg-[#FFFFF0] text-[#111816] rounded-[32px] sm:rounded-[36px] shadow-[0_32px_80px_rgba(0,0,0,0.28),0_4px_24px_rgba(0,0,0,0.08)] border border-black/10 flex flex-col justify-between overflow-hidden focus:outline-none z-10 animate-in fade-in zoom-in-95 duration-300"
         role="dialog"
         aria-modal="true"
         aria-labelledby="booking-title"
       >
         {/* Header */}
-        <div className="p-6 md:p-8 border-b border-black/8 flex items-center justify-between bg-white">
+        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-black/8 flex items-center justify-between bg-white/70 backdrop-blur-md flex-shrink-0">
           <div>
-            <h2 id="booking-title" className="text-2xl font-serif text-[#111816] font-bold">
+            <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.24em] text-[#00A89E] block mb-1">
+              {callbackRequest ? "RAPID INQUIRY" : "EXPERIENCE CLINICAL EXCELLENCE"}
+            </span>
+            <h2 id="booking-title" className="text-2xl sm:text-3xl font-serif text-[#111816] font-bold tracking-tight">
               {callbackRequest ? "Request a Callback" : "Book Consultation"}
             </h2>
-            <p className="text-xs text-[#4A5568] mt-1">
-              {callbackRequest ? "We will reach out during clinical hours" : "Complete our brief structured booking"}
+            <p className="text-xs sm:text-sm text-[#5A6B66] font-sans font-normal mt-0.5">
+              {callbackRequest ? "Our specialists will reach out during clinical hours." : "Schedule a comprehensive examination with our lead doctors."}
             </p>
           </div>
           <button
             onClick={closeOverlay}
-            className="p-2 text-[#718096] hover:text-[#111816] hover:bg-black/5 rounded-full transition-colors cursor-pointer"
+            className="w-10 h-10 rounded-full bg-black/5 hover:bg-black/10 text-[#111816] flex items-center justify-center transition-all duration-200 cursor-pointer hover:rotate-90"
             aria-label="Close booking modal"
           >
             <X className="w-5 h-5" />
@@ -134,65 +137,68 @@ export default function BookingOverlay() {
 
         {/* Success State */}
         {success ? (
-          <div className="flex-1 p-6 md:p-8 flex flex-col justify-center items-center text-center gap-6">
-            <div className="w-16 h-16 bg-[#00A89E]/10 text-[#00A89E] flex items-center justify-center rounded-full mb-2">
-              <Check className="w-8 h-8" />
+          <div className="flex-1 p-8 sm:p-12 flex flex-col justify-center items-center text-center gap-6">
+            <div className="w-20 h-20 bg-[#E6F7F5] text-[#00A89E] flex items-center justify-center rounded-full shadow-inner">
+              <Check className="w-10 h-10" />
             </div>
-            <h3 className="text-2xl font-serif text-[#111816] font-bold">You are Booked</h3>
-            <p className="text-sm text-[#4A5568] max-w-sm">
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#00A89E]">CONFIRMATION SENT</span>
+              <h3 className="text-3xl font-serif text-[#111816] font-bold mt-1">You are Provisionally Booked</h3>
+            </div>
+            <p className="text-sm sm:text-base text-[#5A6B66] max-w-md font-sans leading-relaxed">
               {callbackRequest
-                ? "Your callback request is logged. A care coordinator will phone you shortly."
-                : `Thank you, ${bookingState.name || "Patient"}. We have provisionally reserved ${bookingState.date} at ${bookingState.time}. Our coordinator will text or call you to finalize details.`}
+                ? "Your callback request is recorded. A senior patient coordinator will phone you shortly."
+                : `Thank you, ${bookingState.name || "Patient"}. We have reserved ${bookingState.date} at ${bookingState.time}. Our clinic concierge will reach out to confirm your diagnostic slot.`}
             </p>
-            <div className="flex flex-col gap-3 w-full max-w-xs mt-4">
+            <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm mt-4">
               <a
                 href={`tel:${clinic.phoneRaw}`}
-                className="w-full py-3 bg-[#00A89E] hover:bg-[#008C84] text-white text-center font-semibold rounded-lg transition-all shadow-md"
+                className="flex-1 py-3.5 bg-[#00A89E] hover:bg-[#008C84] text-white text-center font-semibold rounded-full transition-all shadow-md text-sm"
               >
-                Call Clinic Directly
+                Call Clinic
               </a>
               <button
                 onClick={() => {
                   resetBooking();
                   closeOverlay();
                 }}
-                className="w-full py-3 border border-black/15 hover:bg-white text-[#111816] text-center font-medium rounded-lg transition-all cursor-pointer"
+                className="flex-1 py-3.5 border border-black/15 hover:bg-white text-[#111816] text-center font-medium rounded-full transition-all cursor-pointer text-sm"
               >
-                Return to Website
+                Return to Site
               </button>
             </div>
           </div>
         ) : callbackRequest ? (
           /* Callback Form */
-          <form onSubmit={handleCallbackSubmit} className="flex-1 p-6 md:p-8 flex flex-col justify-between">
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-2">
-                <label className="text-xs font-semibold uppercase tracking-wider text-[#718096]">Your Name</label>
+          <form onSubmit={handleCallbackSubmit} className="flex-1 p-6 sm:p-8 flex flex-col justify-between overflow-y-auto">
+            <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#5A6B66]">Your Name</label>
                 <input
                   required
                   name="name"
                   type="text"
                   placeholder="e.g. Rahul Sharma"
-                  className="w-full p-3 bg-white border border-black/15 rounded-lg text-sm text-[#111816] focus:border-[#00A89E] focus:outline-none"
+                  className="w-full px-4 py-3 bg-white border border-black/10 rounded-xl text-sm text-[#111816] focus:border-[#00A89E] focus:ring-2 focus:ring-[#00A89E]/20 focus:outline-none transition-all"
                 />
               </div>
 
-              <div className="flex flex-col gap-2">
-                <label className="text-xs font-semibold uppercase tracking-wider text-[#718096]">Contact Number</label>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#5A6B66]">Contact Number</label>
                 <input
                   required
                   name="phone"
                   type="tel"
                   placeholder="e.g. +91 98765 43210"
-                  className="w-full p-3 bg-white border border-black/15 rounded-lg text-sm text-[#111816] focus:border-[#00A89E] focus:outline-none"
+                  className="w-full px-4 py-3 bg-white border border-black/10 rounded-xl text-sm text-[#111816] focus:border-[#00A89E] focus:ring-2 focus:ring-[#00A89E]/20 focus:outline-none transition-all"
                 />
               </div>
 
-              <div className="flex flex-col gap-2">
-                <label className="text-xs font-semibold uppercase tracking-wider text-[#718096]">Preferred Callback Time</label>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#5A6B66]">Preferred Callback Window</label>
                 <select
                   name="preferredTime"
-                  className="w-full p-3 bg-white border border-black/15 rounded-lg text-sm text-[#111816] focus:border-[#00A89E] focus:outline-none"
+                  className="w-full px-4 py-3 bg-white border border-black/10 rounded-xl text-sm text-[#111816] focus:border-[#00A89E] focus:ring-2 focus:ring-[#00A89E]/20 focus:outline-none transition-all"
                 >
                   <option>Morning (10:00 AM - 1:00 PM)</option>
                   <option>Afternoon (1:00 PM - 4:00 PM)</option>
@@ -204,31 +210,31 @@ export default function BookingOverlay() {
             <button
               disabled={loading}
               type="submit"
-              className="w-full py-4 mt-8 bg-[#00A89E] hover:bg-[#008C84] text-white font-semibold rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
+              className="w-full py-4 mt-8 bg-[#111816] hover:bg-[#00A89E] text-white font-semibold rounded-full transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-xl"
             >
-              {loading ? "Registering Callback..." : "Submit Callback Request"}
+              {loading ? "Registering Request..." : "Request Call Now"}
             </button>
           </form>
         ) : (
           /* Booking Step Flow */
-          <div className="flex-1 flex flex-col justify-between">
+          <div className="flex-1 flex flex-col justify-between overflow-hidden">
             {/* Step Indicators */}
-            <div className="px-6 md:px-8 py-4 bg-white border-b border-black/8 flex items-center justify-between text-xs font-semibold text-[#718096]">
+            <div className="px-6 sm:px-8 py-3.5 bg-white/60 border-b border-black/8 flex items-center justify-between text-xs font-semibold text-[#5A6B66] flex-shrink-0">
               {STEPS.map((name, i) => (
                 <div key={name} className="flex items-center gap-2">
                   <span
                     className={cn(
-                      "w-5 h-5 rounded-full flex items-center justify-center border text-[10px]",
+                      "w-6 h-6 rounded-full flex items-center justify-center border text-[11px] font-bold transition-all",
                       step === i + 1
-                        ? "bg-[#00A89E] text-white border-[#00A89E]"
+                        ? "bg-[#00A89E] text-white border-[#00A89E] shadow-sm ring-2 ring-[#00A89E]/20"
                         : step > i + 1
                         ? "bg-[#00A89E] text-white border-[#00A89E]"
-                        : "bg-transparent border-black/20 text-[#718096]"
+                        : "bg-transparent border-black/20 text-[#5A6B66]"
                     )}
                   >
-                    {step > i + 1 ? <Check className="w-3 h-3" /> : i + 1}
+                    {step > i + 1 ? <Check className="w-3.5 h-3.5" /> : i + 1}
                   </span>
-                  <span className={cn("hidden sm:inline", step === i + 1 && "text-[#111816] font-bold")}>
+                  <span className={cn("hidden sm:inline text-xs", step === i + 1 && "text-[#111816] font-bold")}>
                     {name}
                   </span>
                 </div>
@@ -236,26 +242,32 @@ export default function BookingOverlay() {
             </div>
 
             {/* Step Content */}
-            <div className="flex-1 p-6 md:p-8">
+            <div className="flex-1 p-6 sm:p-8 overflow-y-auto">
               {step === 1 && (
-                <div className="flex flex-col gap-6">
-                  <h3 className="text-lg font-serif text-[#111816] font-bold">What would you like help with?</h3>
-                  <div className="grid grid-cols-1 gap-3">
+                <div className="flex flex-col gap-5">
+                  <div>
+                    <h3 className="text-xl font-serif text-[#111816] font-bold">What would you like assistance with?</h3>
+                    <p className="text-xs text-[#5A6B66] mt-1">Select your primary reason for visiting our clinic.</p>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {[
-                      "Pain or discomfort",
-                      "Smile improvement",
-                      "Missing tooth",
-                      "Straight teeth",
-                      "General check-up",
-                      "I'm not sure"
-                    ].map((concernOption) => (
+                      { title: "Pain or Discomfort", subtitle: "Same-day relief & emergency triage" },
+                      { title: "Smile Improvement", subtitle: "Veneers, whitening & aesthetics" },
+                      { title: "Missing Tooth", subtitle: "Guided implants & prosthetics" },
+                      { title: "Straight Teeth", subtitle: "Clear aligners & Invisalign" },
+                      { title: "General Check-up", subtitle: "Digital 3D scans & cleaning" },
+                      { title: "Specialist Consultation", subtitle: "Second opinion & treatment plans" }
+                    ].map((item) => (
                       <button
-                        key={concernOption}
-                        onClick={() => handleConcernSelect(concernOption)}
-                        className="w-full p-4 bg-white hover:bg-[#F0FAF9] border border-black/10 hover:border-[#00A89E] rounded-xl text-left text-sm font-medium text-[#111816] hover:text-[#00A89E] transition-all flex items-center justify-between group cursor-pointer shadow-xs"
+                        key={item.title}
+                        onClick={() => handleConcernSelect(item.title)}
+                        className="w-full p-4 bg-white hover:bg-[#E6F7F5]/50 border border-black/8 hover:border-[#00A89E] rounded-2xl text-left transition-all duration-200 flex flex-col justify-between group cursor-pointer shadow-xs hover:shadow-md hover:-translate-y-0.5"
                       >
-                        <span>{concernOption}</span>
-                        <ChevronRight className="w-4 h-4 text-[#718096] group-hover:text-[#00A89E] group-hover:translate-x-1 transition-all" />
+                        <div className="flex items-center justify-between w-full">
+                          <span className="text-sm font-bold text-[#111816] group-hover:text-[#00A89E] transition-colors">{item.title}</span>
+                          <ChevronRight className="w-4 h-4 text-[#718096] group-hover:text-[#00A89E] group-hover:translate-x-1 transition-all" />
+                        </div>
+                        <span className="text-[11px] text-[#5A6B66] font-medium mt-1">{item.subtitle}</span>
                       </button>
                     ))}
                   </div>
@@ -264,17 +276,20 @@ export default function BookingOverlay() {
 
               {step === 2 && (
                 <div className="flex flex-col gap-6">
-                  <h3 className="text-lg font-serif text-[#111816] font-bold">Select a Date & Time</h3>
+                  <div>
+                    <h3 className="text-xl font-serif text-[#111816] font-bold">Select Appointment Slot</h3>
+                    <p className="text-xs text-[#5A6B66] mt-1">Choose a convenient date and time for your clinical assessment.</p>
+                  </div>
                   
-                  <div className="flex flex-col gap-3">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-[#718096]">Available Days</span>
-                    <div className="grid grid-cols-2 gap-2">
+                  <div className="flex flex-col gap-2.5">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#5A6B66]">Preferred Day</span>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                       {dates.map((d) => (
                         <button
                           key={d.value}
                           type="button"
                           onClick={() => handleDateSelect(d.label, timeSlots[0])}
-                          className="p-3 bg-white hover:bg-[#F0FAF9] border border-black/10 hover:border-[#00A89E] rounded-lg text-sm font-medium text-[#111816] hover:text-[#00A89E] transition-all cursor-pointer shadow-xs"
+                          className="p-3.5 bg-white hover:bg-[#E6F7F5] border border-black/10 hover:border-[#00A89E] rounded-xl text-xs sm:text-sm font-bold text-[#111816] hover:text-[#00A89E] transition-all cursor-pointer shadow-xs text-center"
                         >
                           {d.label}
                         </button>
@@ -282,15 +297,15 @@ export default function BookingOverlay() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-3 mt-4">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-[#718096]">Available Times (Demo Slots)</span>
-                    <div className="grid grid-cols-4 gap-2">
+                  <div className="flex flex-col gap-2.5">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#5A6B66]">Preferred Time</span>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                       {timeSlots.map((ts) => (
                         <button
                           key={ts}
                           type="button"
-                          onClick={() => handleDateSelect("Today", ts)}
-                          className="p-2 text-xs bg-white hover:bg-[#00A89E] hover:text-white rounded border border-black/10 transition-all cursor-pointer shadow-xs font-medium"
+                          onClick={() => handleDateSelect("Upcoming Slot", ts)}
+                          className="p-3 bg-white hover:bg-[#00A89E] hover:text-white rounded-xl border border-black/10 transition-all cursor-pointer shadow-xs font-bold text-xs text-center"
                         >
                           {ts}
                         </button>
@@ -301,53 +316,58 @@ export default function BookingOverlay() {
               )}
 
               {step === 3 && (
-                <form onSubmit={handleDetailsSubmit} className="flex flex-col gap-6">
-                  <h3 className="text-lg font-serif text-[#111816] font-bold">Your Details</h3>
-
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-semibold uppercase tracking-wider text-[#718096]">Your Name</label>
-                    <input
-                      required
-                      name="name"
-                      type="text"
-                      placeholder="e.g. Nitin Gupta"
-                      className="w-full p-3 bg-white border border-black/15 rounded-lg text-sm text-[#111816] focus:border-[#00A89E] focus:outline-none"
-                    />
+                <form onSubmit={handleDetailsSubmit} className="flex flex-col gap-5">
+                  <div>
+                    <h3 className="text-xl font-serif text-[#111816] font-bold">Patient Details</h3>
+                    <p className="text-xs text-[#5A6B66] mt-1">We will send confirmation and directions to these coordinates.</p>
                   </div>
 
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-semibold uppercase tracking-wider text-[#718096]">Phone Number</label>
-                    <input
-                      required
-                      name="phone"
-                      type="tel"
-                      placeholder="e.g. +91 99990 11111"
-                      className="w-full p-3 bg-white border border-black/15 rounded-lg text-sm text-[#111816] focus:border-[#00A89E] focus:outline-none"
-                    />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs font-semibold uppercase tracking-wider text-[#5A6B66]">Full Name</label>
+                      <input
+                        required
+                        name="name"
+                        type="text"
+                        placeholder="e.g. Nitin Gupta"
+                        className="w-full px-4 py-3 bg-white border border-black/10 rounded-xl text-sm text-[#111816] focus:border-[#00A89E] focus:ring-2 focus:ring-[#00A89E]/20 focus:outline-none transition-all"
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs font-semibold uppercase tracking-wider text-[#5A6B66]">Phone Number</label>
+                      <input
+                        required
+                        name="phone"
+                        type="tel"
+                        placeholder="e.g. +91 99990 11111"
+                        className="w-full px-4 py-3 bg-white border border-black/10 rounded-xl text-sm text-[#111816] focus:border-[#00A89E] focus:ring-2 focus:ring-[#00A89E]/20 focus:outline-none transition-all"
+                      />
+                    </div>
                   </div>
 
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-semibold uppercase tracking-wider text-[#718096]">Email Address (Optional)</label>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold uppercase tracking-wider text-[#5A6B66]">Email Address (Optional)</label>
                     <input
                       name="email"
                       type="email"
                       placeholder="e.g. nitin@example.com"
-                      className="w-full p-3 bg-white border border-black/15 rounded-lg text-sm text-[#111816] focus:border-[#00A89E] focus:outline-none"
+                      className="w-full px-4 py-3 bg-white border border-black/10 rounded-xl text-sm text-[#111816] focus:border-[#00A89E] focus:ring-2 focus:ring-[#00A89E]/20 focus:outline-none transition-all"
                     />
                   </div>
 
-                  <div className="flex items-center gap-3 py-2">
-                    <input id="whatsapp-updates" name="whatsapp" type="checkbox" defaultChecked className="w-4 h-4 accent-[#00A89E]" />
-                    <label htmlFor="whatsapp-updates" className="text-xs text-[#4A5568]">
-                      Send provisional booking details & updates via WhatsApp
+                  <div className="flex items-center gap-3 py-1">
+                    <input id="whatsapp-updates" name="whatsapp" type="checkbox" defaultChecked className="w-4 h-4 accent-[#00A89E] rounded" />
+                    <label htmlFor="whatsapp-updates" className="text-xs text-[#5A6B66] font-medium">
+                      Send clinic directions & appointment reminders via WhatsApp
                     </label>
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-4 bg-[#00A89E] hover:bg-[#008C84] text-white font-semibold rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                    className="w-full py-4 mt-2 bg-[#111816] hover:bg-[#00A89E] text-white font-semibold rounded-full transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg"
                   >
-                    <span>Continue</span>
+                    <span>Proceed to Review</span>
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </form>
@@ -355,22 +375,26 @@ export default function BookingOverlay() {
 
               {step === 4 && (
                 <div className="flex flex-col gap-6">
-                  <h3 className="text-lg font-serif text-[#111816] font-bold">Confirm Provisional Booking</h3>
-                  <div className="bg-white border border-black/8 rounded-xl p-6 flex flex-col gap-4 text-sm text-[#111816] shadow-sm">
-                    <div className="flex justify-between border-b border-black/8 pb-2">
-                      <span className="text-[#718096] font-medium">Concern:</span>
+                  <div>
+                    <h3 className="text-xl font-serif text-[#111816] font-bold">Review & Reserve</h3>
+                    <p className="text-xs text-[#5A6B66] mt-1">Please confirm your appointment details before submittal.</p>
+                  </div>
+
+                  <div className="bg-white border border-black/8 rounded-2xl p-6 flex flex-col gap-3.5 text-sm text-[#111816] shadow-sm">
+                    <div className="flex justify-between border-b border-black/8 pb-2.5">
+                      <span className="text-[#5A6B66] font-medium text-xs uppercase tracking-wider">Concern</span>
                       <span className="font-bold text-[#111816]">{bookingState.concern}</span>
                     </div>
-                    <div className="flex justify-between border-b border-black/8 pb-2">
-                      <span className="text-[#718096] font-medium">Reserved Slot:</span>
-                      <span className="font-bold text-[#111816]">{bookingState.date} at {bookingState.time}</span>
+                    <div className="flex justify-between border-b border-black/8 pb-2.5">
+                      <span className="text-[#5A6B66] font-medium text-xs uppercase tracking-wider">Slot</span>
+                      <span className="font-bold text-[#00A89E]">{bookingState.date} at {bookingState.time}</span>
                     </div>
-                    <div className="flex justify-between border-b border-black/8 pb-2">
-                      <span className="text-[#718096] font-medium">Full Name:</span>
+                    <div className="flex justify-between border-b border-black/8 pb-2.5">
+                      <span className="text-[#5A6B66] font-medium text-xs uppercase tracking-wider">Patient Name</span>
                       <span className="font-bold text-[#111816]">{bookingState.name}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-[#718096] font-medium">Contact:</span>
+                      <span className="text-[#5A6B66] font-medium text-xs uppercase tracking-wider">Contact</span>
                       <span className="font-bold text-[#111816]">{bookingState.phone}</span>
                     </div>
                   </div>
@@ -378,16 +402,16 @@ export default function BookingOverlay() {
                   <button
                     disabled={loading}
                     onClick={handleConfirm}
-                    className="w-full py-4 bg-[#00A89E] hover:bg-[#008C84] text-white font-semibold rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                    className="w-full py-4 bg-[#00A89E] hover:bg-[#008C84] text-white font-semibold rounded-full transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-xl"
                   >
-                    {loading ? "Confirming..." : "Confirm Provisional Booking"}
+                    {loading ? "Confirming Slot..." : "Confirm Consultation"}
                   </button>
 
                   <button
                     onClick={() => setStep(3)}
-                    className="w-full py-2.5 text-xs text-[#718096] hover:text-[#00A89E] font-medium underline transition-colors cursor-pointer"
+                    className="w-full py-1 text-xs text-[#5A6B66] hover:text-[#00A89E] font-medium transition-colors cursor-pointer text-center"
                   >
-                    Modify details
+                    ← Edit Details
                   </button>
                 </div>
               )}

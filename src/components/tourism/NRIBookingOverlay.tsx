@@ -74,13 +74,13 @@ export default function NRIBookingOverlay() {
       <div
         ref={containerRef}
         tabIndex={-1}
-        className="relative w-full max-w-[650px] h-full bg-alabaster shadow-overlay flex flex-col justify-between overflow-y-auto focus:outline-none"
+        className="relative w-full max-w-[650px] h-full bg-alabaster shadow-overlay flex flex-col justify-between overflow-y-auto focus:outline-none pt-[96px] sm:pt-[104px]"
         role="dialog"
         aria-modal="true"
         aria-labelledby="nri-title"
       >
         {/* Header */}
-        <div className="p-6 md:p-8 border-b border-border flex items-center justify-between">
+        <div className="p-6 md:p-8 border-b border-border flex items-center justify-between flex-shrink-0">
           <div>
             <h2 id="nri-title" className="text-2xl font-serif text-spruce font-semibold">
               NRI & International Patient Inquiry

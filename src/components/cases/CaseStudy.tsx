@@ -84,11 +84,11 @@ export default function CaseStudy() {
   };
 
   return (
-    <section id="stories" className="py-20 md:py-28 relative z-10 border-t border-black/5 bg-[#FFFFF0]/40">
-      <div className="w-full max-w-[1740px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 pr-6 sm:pr-8 lg:pr-16 xl:pr-20">
-        
-        {/* Section Header: Matches Wireframe "success stories" banner */}
-        <div className="flex flex-col items-start gap-2 mb-10 sm:mb-12 max-w-3xl pl-0 sm:pl-2 lg:pl-4">
+    <section id="stories" className="min-h-screen flex flex-col justify-center py-10 sm:py-14 lg:py-16 relative z-10 border-t border-black/5 bg-[#FFFFF0]/40">
+      <div className="container-editorial my-auto">
+        <div className="container-inner">
+          {/* Section Header: Matches Wireframe "success stories" banner */}
+          <div className="flex flex-col items-start gap-2 mb-10 sm:mb-12 max-w-3xl">
           <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#00A89E] block">
             PATIENT TRANSFORMATIONS
           </span>
@@ -306,6 +306,7 @@ export default function CaseStudy() {
 
         </div>
 
+        </div>
       </div>
     </section>
   );
