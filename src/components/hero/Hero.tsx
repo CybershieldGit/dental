@@ -41,18 +41,18 @@ export default function Hero() {
     <>
       <section
         id="hero"
-        className="relative w-full min-h-screen flex flex-col justify-center pt-20 sm:pt-24 lg:pt-24 pb-8 sm:pb-10 z-10 select-none text-[#111816]"
+        className="relative w-full min-h-screen flex flex-col justify-start sm:justify-center pt-[52px] sm:pt-24 lg:pt-24 pb-8 sm:pb-10 z-10 select-none text-[#111816]"
       >
         {/* Full-Width Expansive Container (Matching Reference Edge-to-Edge Breathing Room) */}
-        <div className="container-editorial flex-1 flex flex-col justify-center my-auto">
+        <div className="container-editorial flex flex-col justify-start sm:flex-1 sm:justify-center sm:my-auto">
           
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 xl:gap-12 items-center min-h-[580px] lg:min-h-[660px]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center min-h-[580px] lg:min-h-[660px]">
             
             {/* Left Column: Heading, Subtitle, CTA, and Feature Metrics */}
-            <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-between h-full py-2 sm:py-4 lg:py-6">
+            <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-start sm:justify-between h-auto sm:h-full py-2 sm:py-4 lg:py-6 gap-6 sm:gap-0">
               
               {/* Top / Middle Typography Block */}
-              <div className="flex flex-col items-start my-auto">
+              <div className="flex flex-col items-start sm:my-auto">
                 <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#00A89E] mb-3 sm:mb-4 block">
                   ADVANCED DENTAL CARE
                 </span>

@@ -492,20 +492,20 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           ───────────────────────────────────────────────────────── */}
       <section
         id="hero"
-        className="absolute inset-0 w-full h-full flex flex-col justify-center pt-[54px] sm:pt-24 lg:pt-24 pb-4 sm:pb-8 lg:pb-10 z-20 pointer-events-auto"
+        className="absolute inset-0 w-full h-full flex flex-col justify-start sm:justify-center pt-[52px] sm:pt-24 lg:pt-24 pb-4 sm:pb-8 lg:pb-10 z-20 pointer-events-auto"
       >
-        <div className="container-editorial flex-1 flex flex-col justify-center my-auto">
-          <div className="container-inner flex-1 flex flex-col justify-center my-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 xl:gap-12 items-center min-h-0 lg:min-h-[500px] xl:min-h-[600px]">
+        <div className="container-editorial flex flex-col justify-start sm:flex-1 sm:justify-center sm:my-auto">
+          <div className="container-inner flex flex-col justify-start sm:flex-1 sm:justify-center sm:my-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center min-h-0 lg:min-h-[500px] xl:min-h-[600px]">
               
               {/* Left Column: Heading, Subtitle, CTA, and Feature Metrics */}
               <div
                 ref={heroContentRef}
-                className="lg:col-span-6 xl:col-span-6 flex flex-col justify-between h-full min-h-[500px] xs:min-h-[540px] sm:min-h-[580px] lg:min-h-0 py-2 sm:py-4 lg:py-6"
+                className="lg:col-span-6 xl:col-span-6 flex flex-col justify-start sm:justify-between h-auto sm:h-full min-h-0 sm:min-h-[580px] lg:min-h-0 pt-0 pb-2 sm:py-4 lg:py-6 gap-5 sm:gap-0"
               >
                 {/* Top / Middle Typography Block + Mobile Inline Image (Reference Match) */}
-                <div className="flex flex-col items-start my-auto w-full relative">
-                  <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#00A89E] mb-1.5 sm:mb-4 block">
+                <div className="flex flex-col items-start sm:my-auto w-full relative">
+                  <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#00A89E] mb-1 sm:mb-4 block">
                     ADVANCED DENTAL CARE
                   </span>
 

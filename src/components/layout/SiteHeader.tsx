@@ -34,12 +34,12 @@ export default function SiteHeader() {
     <>
       {/* Island Nav Wrapper — GPU-composited, never triggers layout on scroll */}
       <div
-        className="fixed top-0 left-0 right-0 z-[100] flex justify-center pt-3.5 sm:pt-5 pointer-events-none"
+        className="fixed top-0 left-0 right-0 z-[100] flex justify-center pt-1.5 sm:pt-5 pointer-events-none"
         style={{ transform: "translateZ(0)", willChange: "transform" }}
       >
         {/* The Floating Glassmorphic Island Pill */}
         <header
-          className={`pointer-events-auto flex items-center justify-between container-inner h-[60px] sm:h-[72px] md:h-[80px] px-4 sm:px-8 lg:px-10 rounded-full border border-black/10 transition-[background-color,box-shadow] duration-500 ${
+          className={`pointer-events-auto flex items-center justify-between container-inner h-[50px] sm:h-[72px] md:h-[80px] px-3.5 sm:px-8 lg:px-10 rounded-full border border-black/10 transition-[background-color,box-shadow] duration-500 ${
             scrolled
               ? "bg-white/85 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.13),0_2px_8px_rgba(0,0,0,0.07)]"
               : "bg-[#FFFFF0]/75 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.07)]"
@@ -48,11 +48,11 @@ export default function SiteHeader() {
         >
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
-            <div className="relative h-9 sm:h-11 w-auto flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+            <div className="relative h-8 sm:h-11 w-auto flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
               <img
                 src="/dental_logo.svg"
                 alt="AnjMohi Dental Clinic"
-                className="h-8 sm:h-10 md:h-11 w-auto object-contain"
+                className="h-7 sm:h-10 md:h-11 w-auto object-contain"
               />
             </div>
           </Link>
