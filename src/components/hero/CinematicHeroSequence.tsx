@@ -10,6 +10,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({
+    ignoreMobileResize: true,
+  });
 }
 
 export default function CinematicHeroSequence({ children }: { children?: React.ReactNode }) {
@@ -38,6 +41,7 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
   const diagHeaderRef = useRef<HTMLDivElement>(null);
   const diagCardsRef = useRef<HTMLDivElement>(null);
   const diagShowcaseRef = useRef<HTMLDivElement>(null);
+  const overlapPanelRef = useRef<HTMLDivElement>(null);
 
   const SLIDE_DURATION = 4200;
 
@@ -155,20 +159,17 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
       ctx = gsap.context(() => {
         // Calculate slot metrics and set as CSS custom properties
         const updateMetrics = () => {
-          if (!triggerContainerRef.current || !expandingImageWrapperRef.current) return;
-          
-          const isMobile = window.innerWidth < 1024;
-          const activeSlot = (isMobile && mobileCardSlotRef.current) ? mobileCardSlotRef.current : heroCardSlotRef.current;
-          if (!activeSlot) return;
+          if (!triggerContainerRef.current || !expandingImageWrapperRef.current || !heroCardSlotRef.current) return;
+          if (window.innerWidth < 1024) return;
 
-          const slotRect = activeSlot.getBoundingClientRect();
+          const slotRect = heroCardSlotRef.current.getBoundingClientRect();
           const parentRect = triggerContainerRef.current.getBoundingClientRect();
 
           const top = slotRect.top - parentRect.top;
           const left = slotRect.left - parentRect.left;
           const width = slotRect.width;
           const height = slotRect.height;
-          const borderRadius = isMobile ? "28px" : "36px";
+          const borderRadius = "36px";
 
           gsap.set(expandingImageWrapperRef.current, {
             top,
@@ -185,14 +186,19 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
 
       // Initial physical translation states
       gsap.set(expandingImageWrapperRef.current, { y: 140, opacity: 0 });
+      gsap.set(mobileCardSlotRef.current, { y: 30, opacity: 0, scale: 0.95 });
       gsap.set(heroLeftCtaRef.current, { x: -40, opacity: 0 });
       gsap.set(floatingBadgeRef.current, { y: 60, opacity: 0, scale: 0.95 });
       gsap.set(floatingContactRef.current, { y: 60, opacity: 0, scale: 0.95 });
 
       // Section 2 initial state
+      gsap.set("#diagnostics", { autoAlpha: 0 });
       gsap.set(diagHeaderRef.current, { opacity: 0, y: 30 });
       gsap.set(diagCardsRef.current?.children || [], { opacity: 0, y: 25, scale: 0.98 });
       gsap.set(diagShowcaseRef.current, { opacity: 0, y: 30, scale: 0.97 });
+      if (overlapPanelRef.current) {
+        gsap.set(overlapPanelRef.current, { yPercent: 100 });
+      }
 
       // ── STEP 1: Entrance Animation ──
       const entranceTl = gsap.timeline({
@@ -206,6 +212,16 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           opacity: 1,
           duration: 1.4,
         })
+        .to(
+          mobileCardSlotRef.current,
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 1.2,
+          },
+          "-=1.4"
+        )
         .to(
           heroLeftCtaRef.current,
           {
@@ -344,9 +360,9 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
         0
       );
 
-      // Transition interactive pointer events
+      // Transition interactive pointer events and visibility
       tl.set("#hero", { pointerEvents: "none" }, 0.9);
-      tl.set("#diagnostics", { pointerEvents: "auto" }, 1.0);
+      tl.set("#diagnostics", { pointerEvents: "auto", autoAlpha: 1 }, 1.0);
 
         // PHASE 2: Reveal Section 2 (Header -> Cards -> Showcase)
         tl.to(
@@ -387,20 +403,36 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
         tl.to({}, { duration: 1.6 });
 
         // PHASE 4: Section 3 Overlap Panel slides up over Section 2
-        tl.fromTo(
-          "#overlap-panel-wrapper",
-          {
-            yPercent: 100,
-          },
-          {
-            yPercent: 0,
-            ease: "power2.inOut",
-            duration: 2.2,
-          }
-        );
+        if (overlapPanelRef.current) {
+          tl.fromTo(
+            overlapPanelRef.current,
+            {
+              yPercent: 100,
+            },
+            {
+              yPercent: 0,
+              ease: "power2.inOut",
+              duration: 2.2,
+            }
+          );
+        }
 
       }, triggerContainerRef);
     };
+
+    if (typeof window !== "undefined") {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+      if (!window.location.hash) {
+        window.scrollTo(0, 0);
+      }
+      if (document.fonts?.ready) {
+        document.fonts.ready.then(() => {
+          ScrollTrigger.refresh();
+        });
+      }
+    }
 
     setupAnimations();
 
@@ -453,12 +485,12 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
       className="relative w-full h-screen overflow-hidden select-none bg-transparent"
     >
       {/* ─────────────────────────────────────────────────────────
-          BACKGROUND LAYER: EXPANDING HERO IMAGE
+          BACKGROUND LAYER: EXPANDING HERO IMAGE (Desktop only)
           Sits behind Section 1 and Section 2
           ───────────────────────────────────────────────────────── */}
       <div
         ref={expandingImageWrapperRef}
-        className="absolute rounded-[28px] sm:rounded-[36px] overflow-hidden bg-[#F3F4F1] shadow-[0_16px_48px_rgba(0,0,0,0.08)] border border-black/5 z-0 will-change-[transform,width,height,top,left,border-radius]"
+        className="hidden lg:block absolute rounded-[36px] overflow-hidden bg-[#F3F4F1] shadow-[0_16px_48px_rgba(0,0,0,0.08)] border border-black/5 z-0 will-change-[transform,width,height,top,left,border-radius]"
         style={{
           top: 0,
           left: 0,
@@ -472,7 +504,7 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           fill
           priority
           loading="eager"
-          sizes="100vw"
+          sizes="(min-width: 1024px) 50vw, 0px"
           className="object-cover object-center"
         />
 
@@ -492,7 +524,7 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           ───────────────────────────────────────────────────────── */}
       <section
         id="hero"
-        className="absolute inset-0 w-full h-full flex flex-col justify-start sm:justify-center pt-[52px] sm:pt-24 lg:pt-24 pb-4 sm:pb-8 lg:pb-10 z-20 pointer-events-auto"
+        className="absolute inset-0 w-full h-full flex flex-col justify-start sm:justify-center pt-[148px] xs:pt-[160px] sm:pt-24 lg:pt-24 pb-4 sm:pb-8 lg:pb-10 z-20 pointer-events-auto"
       >
         <div className="container-editorial flex flex-col justify-start sm:flex-1 sm:justify-center sm:my-auto">
           <div className="container-inner flex flex-col justify-start sm:flex-1 sm:justify-center sm:my-auto">
@@ -523,11 +555,21 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
                       </p>
                     </div>
 
-                    {/* Mobile-only tall rounded hero image card slot */}
+                    {/* Mobile-only tall rounded hero image card */}
                     <div
                       ref={mobileCardSlotRef}
-                      className="lg:hidden w-[136px] xs:w-[146px] sm:w-[170px] h-[182px] xs:h-[196px] sm:h-[215px] rounded-[30px] overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.15)] border-2 border-white flex-shrink-0 relative bg-[#F3F4F1] mt-0.5 opacity-0"
-                    />
+                      className="lg:hidden w-[136px] xs:w-[146px] sm:w-[170px] h-[182px] xs:h-[196px] sm:h-[215px] rounded-[28px] overflow-hidden shadow-[0_12px_36px_rgba(0,0,0,0.14)] border-2 border-white flex-shrink-0 relative bg-[#F3F4F1] mt-0.5"
+                    >
+                      <Image
+                        src="/images/hero-smile.jpg"
+                        alt="Confident smile after treatment at AnjMohi Dental Clinic"
+                        fill
+                        priority
+                        loading="eager"
+                        sizes="(max-width: 1024px) 180px, 0px"
+                        className="object-cover object-center"
+                      />
+                    </div>
                   </div>
 
                   {/* CTA Pill Button */}
@@ -642,7 +684,8 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           ───────────────────────────────────────────────────────── */}
       <section
         id="diagnostics"
-        className="absolute inset-0 w-full h-full flex flex-col justify-center pt-24 sm:pt-28 lg:pt-24 pb-6 sm:pb-8 lg:pb-10 z-20 pointer-events-none"
+        className="absolute inset-0 w-full h-full flex flex-col justify-center pt-24 sm:pt-28 lg:pt-24 pb-6 sm:pb-8 lg:pb-10 z-20 pointer-events-none opacity-0 invisible"
+        style={{ opacity: 0, visibility: "hidden" }}
       >
         <div
           className="container-editorial flex-1 flex flex-col justify-center my-auto"
@@ -847,6 +890,7 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           ───────────────────────────────────────────────────────── */}
       {children && (
         <div
+          ref={overlapPanelRef}
           id="overlap-panel-wrapper"
           className="absolute inset-0 w-full min-h-screen z-40 will-change-transform"
         >

@@ -41,7 +41,7 @@ export default function Hero() {
     <>
       <section
         id="hero"
-        className="relative w-full min-h-screen flex flex-col justify-start sm:justify-center pt-[52px] sm:pt-24 lg:pt-24 pb-8 sm:pb-10 z-10 select-none text-[#111816]"
+        className="relative w-full min-h-screen flex flex-col justify-start sm:justify-center pt-[148px] xs:pt-[160px] sm:pt-24 lg:pt-24 pb-8 sm:pb-10 z-10 select-none text-[#111816]"
       >
         {/* Full-Width Expansive Container (Matching Reference Edge-to-Edge Breathing Room) */}
         <div className="container-editorial flex flex-col justify-start sm:flex-1 sm:justify-center sm:my-auto">

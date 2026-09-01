@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import SiteHeader from "@/components/layout/SiteHeader";
 import Footer from "@/components/layout/Footer";
 import FixedClinicEnvironment from "@/components/layout/FixedClinicEnvironment";
@@ -11,6 +11,16 @@ import CaseStudyOverlay from "@/components/cases/CaseStudyOverlay";
 import NRIBookingOverlay from "@/components/tourism/NRIBookingOverlay";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+      if (!window.location.hash) {
+        window.scrollTo(0, 0);
+      }
+    }
+  }, []);
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-[#FFFFF0] flex items-center justify-center">
