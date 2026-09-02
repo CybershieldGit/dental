@@ -17,17 +17,20 @@ export default function FixedClinicEnvironment() {
     if (!containerRef.current || !imageRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Subtle ambient depth parallax on fixed background as user scrolls
-      gsap.to(imageRef.current, {
-        scale: 1.02,
-        y: 20,
-        ease: "none",
-        scrollTrigger: {
-          trigger: document.body,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 0.8,
-        },
+      const mm = gsap.matchMedia();
+      // Only apply parallax scrub on desktop to prevent mobile touch jitter
+      mm.add("(min-width: 1024px)", () => {
+        gsap.to(imageRef.current, {
+          scale: 1.02,
+          y: 20,
+          ease: "none",
+          scrollTrigger: {
+            trigger: document.body,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 0.8,
+          },
+        });
       });
     }, containerRef);
 
@@ -37,17 +40,25 @@ export default function FixedClinicEnvironment() {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 w-full h-full z-0 overflow-hidden pointer-events-none bg-[#FFFFF0]"
+      className="fixed top-0 left-0 right-0 w-full min-h-[120vh] h-[120lvh] z-0 overflow-hidden pointer-events-none bg-[#FFFFF0] transform-gpu [-webkit-transform:translateZ(0)]"
+      style={{
+        transform: "translateZ(0)",
+        willChange: "transform",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+      }}
     >
       {/* Full-Bleed Fixed Background Operatory Suite Image */}
-      <div ref={imageRef} className="w-full h-full relative will-transform">
+      <div ref={imageRef} className="w-full h-full min-h-[120vh] relative will-transform transform-gpu">
         <Image
           src="/images/clinic-operatory-real.jpg"
           alt="AnjMohi Modern Dental Operatory Suite"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-right"
+          className="object-cover object-right pointer-events-none"
         />
 
         {/* 

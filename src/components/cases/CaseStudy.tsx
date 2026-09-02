@@ -84,34 +84,156 @@ export default function CaseStudy() {
   };
 
   return (
-    <section id="stories" className="min-h-screen flex flex-col justify-center py-10 sm:py-14 lg:py-16 relative z-10 border-t border-black/5 bg-[#FFFFF0]/40">
-      <div className="container-editorial my-auto">
-        <div className="container-inner">
+    <section id="stories" className="min-h-screen flex flex-col justify-start sm:justify-center pt-10 xs:pt-12 sm:py-14 lg:py-16 pb-8 xs:pb-10 relative z-10 border-t border-black/5 bg-[#FFFFF0] [-webkit-font-smoothing:antialiased] [text-rendering:optimizeLegibility]">
+      <div className="container-editorial flex-1 flex flex-col justify-start sm:justify-center sm:my-auto">
+        <div className="container-inner flex-1 flex flex-col justify-between sm:justify-center sm:my-auto">
           {/* Section Header: Matches Wireframe "success stories" banner */}
-          <div className="flex flex-col items-start gap-2 mb-10 sm:mb-12 max-w-3xl">
-          <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#00A89E] block">
+          <div className="flex flex-col items-start gap-1 sm:gap-2 mb-2 sm:mb-12 max-w-3xl">
+          <span className="text-[10.5px] sm:text-xs font-bold uppercase tracking-[0.24em] text-[#00A89E] block">
             PATIENT TRANSFORMATIONS
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-[44px] xl:text-[48px] font-serif text-[#111816] font-medium leading-[1.08] tracking-tight">
+          <h2 className="text-2xl sm:text-4xl lg:text-[44px] xl:text-[48px] font-serif text-[#111816] font-semibold leading-[1.08] tracking-tight">
             Success Stories
           </h2>
-          <p className="text-sm sm:text-base md:text-[17px] text-[#4A5568] font-sans font-normal leading-relaxed max-w-xl">
+          <p className="text-xs sm:text-base md:text-[17px] text-[#4A5568] font-sans font-normal leading-relaxed max-w-xl hidden sm:block">
             Explore verified before-and-after transformations. Click any case to inspect the clinical details and surgical methodology.
           </p>
         </div>
 
-        {/* Wireframe Grid: Left 2x2 Before/After Cards + Right Detail Showcase */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+        {/* ─────────────────────────────────────────────────────────────
+            MOBILE VIEW: Featured Interactive Transformation Card (lg:hidden)
+            ───────────────────────────────────────────────────────────── */}
+        <div className="lg:hidden flex-1 flex flex-col justify-between gap-2.5">
+          {/* 1. Category Switcher Horizontal Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5 -mx-1 px-1">
+            {casesList.map((item, idx) => {
+              const isSelected = activeCaseIdx === idx;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveCaseIdx(idx)}
+                  className={`px-3.5 py-1.5 rounded-full text-[11px] font-bold tracking-wide whitespace-nowrap transition-colors duration-200 cursor-pointer flex-shrink-0 ${
+                    isSelected
+                      ? "bg-[#00A89E] text-white shadow-[0_3px_10px_rgba(0,168,158,0.3)] ring-1 ring-[#00A89E]"
+                      : "bg-white text-[#5A6B66] border border-black/10 hover:bg-white"
+                  }`}
+                >
+                  {item.tag}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* 2. Main Featured Transformation Card */}
+          <div className="rounded-2xl bg-white border border-black/8 shadow-[0_14px_36px_rgba(0,0,0,0.07)] p-4 xs:p-5 flex-1 flex flex-col justify-between">
+            <div>
+              {/* Top Row: Category Tag + Case Counter */}
+              <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-black/5">
+                <span className="text-[10.5px] font-bold uppercase tracking-wider text-[#00A89E] bg-[#E6F7F5] px-2.5 py-0.5 rounded-md">
+                  {activeCase.category}
+                </span>
+                <span className="text-xs font-semibold text-[#718096]">
+                  0{activeCaseIdx + 1} <span className="opacity-40">/</span> 0{casesList.length}
+                </span>
+              </div>
+
+              {/* Side-by-Side Large Before & After Images */}
+              <div className="grid grid-cols-2 gap-2 w-full h-[180px] xs:h-[205px] rounded-xl overflow-hidden relative">
+                {/* Before Image */}
+                <div className="relative w-full h-full bg-slate-100 rounded-lg overflow-hidden border border-black/5">
+                  <Image
+                    src={activeCase.beforeImg}
+                    alt={`${activeCase.tag} Before`}
+                    fill
+                    sizes="(max-width: 1024px) 50vw, 20vw"
+                    className="object-cover object-center"
+                  />
+                  <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-sm text-white text-[9.5px] font-bold uppercase tracking-wider">
+                    Before
+                  </span>
+                </div>
+
+                {/* After Image */}
+                <div className="relative w-full h-full bg-slate-100 rounded-lg overflow-hidden border border-black/5">
+                  <Image
+                    src={activeCase.afterImg}
+                    alt={`${activeCase.tag} After`}
+                    fill
+                    sizes="(max-width: 1024px) 50vw, 20vw"
+                    className="object-cover object-center"
+                  />
+                  <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-[#00A89E]/90 backdrop-blur-sm text-white text-[9.5px] font-bold uppercase tracking-wider">
+                    After
+                  </span>
+                </div>
+              </div>
+
+              {/* Title & Description */}
+              <h3 className="text-base xs:text-lg font-serif font-bold text-[#111816] mt-3 leading-snug">
+                {activeCase.title}
+              </h3>
+              <p className="text-[12.5px] text-[#4A5568] leading-relaxed mt-1 line-clamp-2">
+                {activeCase.description}
+              </p>
+            </div>
+
+            <div>
+              {/* Metric Pills Row */}
+              <div className="grid grid-cols-3 gap-2 my-3 pt-2.5 border-t border-black/5 text-[11px]">
+                <div className="flex flex-col bg-[#F8FAF9] p-2 rounded-lg border border-black/5">
+                  <span className="text-[8.5px] uppercase font-semibold text-[#718096]">Duration</span>
+                  <span className="font-bold text-[#111816] truncate">{activeCase.duration}</span>
+                </div>
+                <div className="flex flex-col bg-[#F8FAF9] p-2 rounded-lg border border-black/5">
+                  <span className="text-[8.5px] uppercase font-semibold text-[#718096]">Visits</span>
+                  <span className="font-bold text-[#111816] truncate">{activeCase.appointments}</span>
+                </div>
+                <div className="flex flex-col bg-[#F8FAF9] p-2 rounded-lg border border-black/5">
+                  <span className="text-[8.5px] uppercase font-semibold text-[#718096]">Specialist</span>
+                  <span className="font-bold text-[#111816] truncate">{activeCase.specialist.replace("Dr. ", "")}</span>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <button
+                onClick={handleOpenCase}
+                className="w-full py-3 px-4 min-h-[44px] rounded-xl bg-[#00A89E] hover:bg-[#008C84] text-white text-xs xs:text-sm font-semibold tracking-wide transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer shadow-[0_4px_14px_rgba(0,168,158,0.25)] hover:shadow-[0_6px_20px_rgba(0,168,158,0.4)]"
+              >
+                <span>Inspect Full Case Study</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* 3. Pagination Dots */}
+          <div className="flex items-center justify-center gap-1.5 pt-2 pb-1">
+            {casesList.map((_, dotIdx) => (
+              <button
+                key={dotIdx}
+                onClick={() => setActiveCaseIdx(dotIdx)}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                  activeCaseIdx === dotIdx ? "w-6 bg-[#00A89E]" : "w-1.5 bg-black/20 hover:bg-black/35"
+                }`}
+                aria-label={`Go to case ${dotIdx + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* ─────────────────────────────────────────────────────────────
+            DESKTOP VIEW: Wireframe 7-col Cards + 5-col Detail Showcase (hidden lg:grid)
+            ───────────────────────────────────────────────────────────── */}
+        <div className="hidden lg:grid grid-cols-12 gap-8 items-stretch">
           
           {/* LEFT: 2x2 Grid of Before/After Cards (7 cols) */}
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+          <div className="col-span-7 grid grid-cols-2 gap-5">
             {casesList.map((item, idx) => {
               const isSelected = activeCaseIdx === idx;
               return (
                 <div
                   key={item.id}
                   onClick={() => setActiveCaseIdx(idx)}
-                  className={`group relative rounded-2xl sm:rounded-3xl p-4 sm:p-5 transition-all duration-300 cursor-pointer flex flex-col justify-between min-h-[220px] sm:min-h-[240px] border ${
+                  className={`group relative rounded-3xl p-5 transition-all duration-300 cursor-pointer flex flex-col justify-between min-h-[240px] border ${
                     isSelected
                       ? "bg-white border-[#00A89E] shadow-[0_12px_36px_rgba(0,168,158,0.18)] ring-2 ring-[#00A89E]/20"
                       : "bg-white/80 border-black/8 hover:border-[#00A89E]/40 hover:bg-white shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
@@ -119,7 +241,7 @@ export default function CaseStudy() {
                 >
                   {/* Top: Card Header Pill & Category */}
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className={`text-[10px] sm:text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full ${
+                    <span className={`text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full ${
                       isSelected
                         ? "bg-[#E6F7F5] text-[#00A89E]"
                         : "bg-black/5 text-[#5A6B66] group-hover:bg-[#E6F7F5] group-hover:text-[#00A89E]"
@@ -132,14 +254,14 @@ export default function CaseStudy() {
                   </div>
 
                   {/* Center: Side-by-Side Mini Before / After Preview Images */}
-                  <div className="grid grid-cols-2 gap-2 my-2 w-full h-[110px] sm:h-[120px] rounded-xl overflow-hidden relative">
+                  <div className="grid grid-cols-2 gap-2 my-2 w-full h-[120px] rounded-xl overflow-hidden relative">
                     {/* Before thumbnail */}
                     <div className="relative w-full h-full bg-slate-100 rounded-lg overflow-hidden">
                       <Image
                         src={item.beforeImg}
                         alt={`${item.tag} Before`}
                         fill
-                        sizes="(max-width: 768px) 50vw, 20vw"
+                        sizes="20vw"
                         className="object-cover object-center"
                       />
                       <span className="absolute bottom-1.5 left-1.5 px-2 py-0.5 rounded bg-black/60 backdrop-blur-sm text-white text-[9px] font-semibold uppercase tracking-wider">
@@ -153,7 +275,7 @@ export default function CaseStudy() {
                         src={item.afterImg}
                         alt={`${item.tag} After`}
                         fill
-                        sizes="(max-width: 768px) 50vw, 20vw"
+                        sizes="20vw"
                         className="object-cover object-center"
                       />
                       <span className="absolute bottom-1.5 right-1.5 px-2 py-0.5 rounded bg-[#00A89E]/90 backdrop-blur-sm text-white text-[9px] font-semibold uppercase tracking-wider">
@@ -164,7 +286,7 @@ export default function CaseStudy() {
 
                   {/* Bottom: Title & Hover indicator */}
                   <div className="flex items-center justify-between pt-2 border-t border-black/5">
-                    <span className="text-xs sm:text-sm font-serif font-bold text-[#111816] group-hover:text-[#00A89E] transition-colors">
+                    <span className="text-sm font-serif font-bold text-[#111816] group-hover:text-[#00A89E] transition-colors">
                       {item.title}
                     </span>
                     <span className={`text-[11px] font-semibold transition-all ${
@@ -178,19 +300,19 @@ export default function CaseStudy() {
             })}
           </div>
 
-          {/* RIGHT: Detail Showcase (Wireframe: Detail about before and after treatment triggered on hover) (5 cols) */}
-          <div className="lg:col-span-5 flex flex-col">
-            <div className="w-full h-full rounded-2xl sm:rounded-3xl bg-white border border-black/8 shadow-[0_16px_40px_rgba(0,0,0,0.06)] p-6 sm:p-7 flex flex-col justify-between">
+          {/* RIGHT: Detail Showcase (5 cols - Desktop only) */}
+          <div className="col-span-5 flex flex-col">
+            <div className="w-full h-full rounded-3xl bg-white border border-black/8 shadow-[0_16px_40px_rgba(0,0,0,0.06)] p-7 flex flex-col justify-between">
               
               {/* Top: Interactive Draggable Split Before/After Slider */}
-              <div className="relative w-full h-[220px] sm:h-[250px] rounded-xl sm:rounded-2xl overflow-hidden border border-black/10 bg-slate-50 select-none mb-5">
+              <div className="relative w-full h-[250px] rounded-2xl overflow-hidden border border-black/10 bg-slate-50 select-none mb-5">
                 {/* After Image */}
                 <div className="absolute inset-0 w-full h-full">
                   <Image
                     src={activeCase.afterImg}
                     alt="After treatment result"
                     fill
-                    sizes="(max-width: 1024px) 100vw, 40vw"
+                    sizes="40vw"
                     className="object-cover object-center"
                   />
                   <span className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-[#111816] border border-black/10 shadow-sm">
@@ -207,7 +329,7 @@ export default function CaseStudy() {
                     src={activeCase.beforeImg}
                     alt="Before treatment"
                     fill
-                    sizes="(max-width: 1024px) 100vw, 40vw"
+                    sizes="40vw"
                     className="object-cover object-center"
                   />
                   <span className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-[#111816] border border-black/10 shadow-sm">
@@ -249,10 +371,10 @@ export default function CaseStudy() {
                     {activeCase.category}
                   </span>
                 </div>
-                <h3 className="text-xl sm:text-2xl font-serif text-[#111816] font-bold mb-2">
+                <h3 className="text-2xl font-serif text-[#111816] font-bold mb-2">
                   {activeCase.title}
                 </h3>
-                <p className="text-xs sm:text-[13px] text-[#4A5568] leading-relaxed">
+                <p className="text-[13px] text-[#4A5568] leading-relaxed">
                   {activeCase.description}
                 </p>
               </div>
@@ -295,7 +417,7 @@ export default function CaseStudy() {
               {/* Bottom Assessment CTA */}
               <button
                 onClick={handleOpenCase}
-                className="w-full py-3.5 px-6 min-h-[46px] rounded-xl bg-[#00A89E] hover:bg-[#008C84] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer shadow-[0_4px_16px_rgba(0,168,158,0.2)] hover:shadow-[0_6px_22px_rgba(0,168,158,0.35)]"
+                className="w-full py-3.5 px-6 min-h-[46px] rounded-xl bg-[#00A89E] hover:bg-[#008C84] text-white text-sm font-semibold tracking-wide transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer shadow-[0_4px_16px_rgba(0,168,158,0.2)] hover:shadow-[0_6px_22px_rgba(0,168,158,0.35)]"
               >
                 <span>View Full Case & Treatment Plan</span>
                 <ArrowRight className="w-4 h-4" />

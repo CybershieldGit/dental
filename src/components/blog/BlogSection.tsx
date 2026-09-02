@@ -165,8 +165,8 @@ export default function BlogSection() {
             })}
           </div>
 
-          {/* RIGHT: Full Detail Blog Showcase (5 cols, triggered on hover) */}
-          <div className="lg:col-span-5 flex flex-col">
+          {/* RIGHT: Full Detail Blog Showcase (5 cols, triggered on hover - Desktop only) */}
+          <div className="hidden lg:flex lg:col-span-5 flex-col">
             <div className="w-full h-full rounded-2xl sm:rounded-3xl bg-white border border-black/8 shadow-[0_16px_40px_rgba(0,0,0,0.06)] p-6 sm:p-7 flex flex-col justify-between">
               
               {/* Featured Visual Image */}

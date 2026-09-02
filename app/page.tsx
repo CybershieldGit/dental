@@ -21,14 +21,9 @@ export default function Home() {
       <CinematicHeroSequence>
         <div
           id="stack-authority"
+          className="relative z-30 lg:z-40 rounded-none lg:rounded-t-[36px] bg-[#FFFFF0] shadow-[0_-16px_50px_rgba(0,0,0,0.12),0_-2px_16px_rgba(0,0,0,0.06)] overflow-hidden min-h-screen transform-gpu [backface-visibility:hidden] [-webkit-font-smoothing:antialiased]"
           style={{
-            position: "relative",
-            zIndex: 40,
-            borderRadius: "28px 28px 0 0",
-            backgroundColor: "#FFFFF0",
-            boxShadow: "0 -14px 70px rgba(0,0,0,0.14), 0 -2px 18px rgba(0,0,0,0.07)",
-            overflow: "hidden",
-            minHeight: "100vh",
+            transform: "translateZ(0)",
           }}
         >
           <CaseStudy />

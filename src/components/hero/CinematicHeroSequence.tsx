@@ -157,265 +157,279 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
 
     const setupAnimations = () => {
       ctx = gsap.context(() => {
-        // Calculate slot metrics and set as CSS custom properties
-        const updateMetrics = () => {
-          if (!triggerContainerRef.current || !expandingImageWrapperRef.current || !heroCardSlotRef.current) return;
-          if (window.innerWidth < 1024) return;
+        const mm = gsap.matchMedia();
 
-          const slotRect = heroCardSlotRef.current.getBoundingClientRect();
-          const parentRect = triggerContainerRef.current.getBoundingClientRect();
+        // ═══════════════════════════════════════════════════════
+        // DESKTOP: (min-width: 1024px) -> Full Cinematic Scrub
+        // ═══════════════════════════════════════════════════════
+        mm.add("(min-width: 1024px)", () => {
+          const updateMetrics = () => {
+            if (!triggerContainerRef.current || !expandingImageWrapperRef.current || !heroCardSlotRef.current) return;
 
-          const top = slotRect.top - parentRect.top;
-          const left = slotRect.left - parentRect.left;
-          const width = slotRect.width;
-          const height = slotRect.height;
-          const borderRadius = "36px";
+            const slotRect = heroCardSlotRef.current.getBoundingClientRect();
+            const parentRect = triggerContainerRef.current.getBoundingClientRect();
 
-          gsap.set(expandingImageWrapperRef.current, {
-            top,
-            left,
-            width,
-            height,
-            borderRadius,
-            position: "absolute",
-            zIndex: 10,
+            const top = slotRect.top - parentRect.top;
+            const left = slotRect.left - parentRect.left;
+            const width = slotRect.width;
+            const height = slotRect.height;
+            const borderRadius = "36px";
+
+            gsap.set(expandingImageWrapperRef.current, {
+              top,
+              left,
+              width,
+              height,
+              borderRadius,
+              position: "absolute",
+              zIndex: 10,
+            });
+          };
+
+          updateMetrics();
+
+          // Initial physical translation states
+          gsap.set(expandingImageWrapperRef.current, { y: 140, opacity: 0 });
+          gsap.set(heroLeftCtaRef.current, { x: -40, opacity: 0 });
+          gsap.set(floatingBadgeRef.current, { y: 60, opacity: 0, scale: 0.95 });
+          gsap.set(floatingContactRef.current, { y: 60, opacity: 0, scale: 0.95 });
+
+          // Section 2 initial state (Desktop)
+          gsap.set("#diagnostics", { autoAlpha: 0 });
+          gsap.set(diagHeaderRef.current, { opacity: 0, y: 30 });
+          gsap.set(diagCardsRef.current?.children || [], { opacity: 0, y: 25, scale: 0.98 });
+          gsap.set(diagShowcaseRef.current, { opacity: 0, y: 30, scale: 0.97 });
+          if (overlapPanelRef.current) {
+            gsap.set(overlapPanelRef.current, { yPercent: 100 });
+          }
+
+          // ── STEP 1: Entrance Animation ──
+          const entranceTl = gsap.timeline({
+            delay: 0.15,
+            defaults: { ease: "power3.out" },
           });
-        };
 
-        updateMetrics();
+          entranceTl
+            .to(expandingImageWrapperRef.current, {
+              y: 0,
+              opacity: 1,
+              duration: 1.4,
+            })
+            .to(
+              heroLeftCtaRef.current,
+              {
+                x: 0,
+                opacity: 1,
+                duration: 1.0,
+              },
+              "-=1.0"
+            )
+            .fromTo(
+              floatingBadgeRef.current,
+              {
+                y: 35,
+                opacity: 0,
+                scale: 0.94,
+              },
+              {
+                y: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 1.2,
+                ease: "power2.out",
+              },
+              "-=0.9"
+            )
+            .set(floatingContactRef.current, { visibility: "visible" }, "-=1.1")
+            .fromTo(
+              floatingContactRef.current,
+              {
+                y: 40,
+                opacity: 0,
+                scale: 0.94,
+              },
+              {
+                y: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 1.2,
+                ease: "power2.out",
+                immediateRender: false,
+              },
+              "-=1.1"
+            );
 
-      // Initial physical translation states
-      gsap.set(expandingImageWrapperRef.current, { y: 140, opacity: 0 });
-      gsap.set(mobileCardSlotRef.current, { y: 30, opacity: 0, scale: 0.95 });
-      gsap.set(heroLeftCtaRef.current, { x: -40, opacity: 0 });
-      gsap.set(floatingBadgeRef.current, { y: 60, opacity: 0, scale: 0.95 });
-      gsap.set(floatingContactRef.current, { y: 60, opacity: 0, scale: 0.95 });
-
-      // Section 2 initial state
-      gsap.set("#diagnostics", { autoAlpha: 0 });
-      gsap.set(diagHeaderRef.current, { opacity: 0, y: 30 });
-      gsap.set(diagCardsRef.current?.children || [], { opacity: 0, y: 25, scale: 0.98 });
-      gsap.set(diagShowcaseRef.current, { opacity: 0, y: 30, scale: 0.97 });
-      if (overlapPanelRef.current) {
-        gsap.set(overlapPanelRef.current, { yPercent: 100 });
-      }
-
-      // ── STEP 1: Entrance Animation ──
-      const entranceTl = gsap.timeline({
-        delay: 0.15,
-        defaults: { ease: "power3.out" },
-      });
-
-      entranceTl
-        .to(expandingImageWrapperRef.current, {
-          y: 0,
-          opacity: 1,
-          duration: 1.4,
-        })
-        .to(
-          mobileCardSlotRef.current,
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            duration: 1.2,
-          },
-          "-=1.4"
-        )
-        .to(
-          heroLeftCtaRef.current,
-          {
-            x: 0,
-            opacity: 1,
-            duration: 1.0,
-          },
-          "-=1.0"
-        )
-        .fromTo(
-          floatingBadgeRef.current,
-          {
-            y: 35,
-            opacity: 0,
-            scale: 0.94,
-          },
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            duration: 1.2,
-            ease: "power2.out",
-          },
-          "-=0.9"
-        )
-        .set(floatingContactRef.current, { visibility: "visible" }, "-=1.1")
-        .fromTo(
-          floatingContactRef.current,
-          {
-            y: 40,
-            opacity: 0,
-            scale: 0.94,
-          },
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            duration: 1.2,
-            ease: "power2.out",
-            immediateRender: false,
-          },
-          "-=1.1"
-        );
-
-      // ── STEP 2: Scroll Scrub Timeline ──
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          id: "hero-pin-trigger",
-          trigger: triggerContainerRef.current,
-          start: "top top",
-          end: "+=260%",
-          pin: true,
-          scrub: 0.6,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onRefreshInit: () => {
-            const progress = ScrollTrigger.getById("hero-pin-trigger")?.progress || 0;
-            if (progress < 0.05) {
-              updateMetrics();
-            }
-          },
-        },
-      });
-
-      // PHASE 1: Hero Image expands from hero slot into full viewport background & Hero text fades
-      tl.fromTo(
-        floatingContactRef.current,
-        { opacity: 1, y: 0, scale: 1 },
-        {
-          opacity: 0,
-          y: -18,
-          scale: 0.96,
-          duration: 0.65,
-          ease: "power2.out",
-          immediateRender: false,
-        },
-        0
-      )
-      .fromTo(
-        floatingBadgeRef.current,
-        { opacity: 1, y: 0, scale: 1 },
-        {
-          opacity: 0,
-          y: 20,
-          scale: 0.95,
-          duration: 0.75,
-          ease: "power2.out",
-          immediateRender: false,
-        },
-        0.05
-      )
-      .fromTo(
-        scrollPromptRef.current,
-        { opacity: 1 },
-        {
-          opacity: 0,
-          duration: 0.5,
-          ease: "power2.out",
-          immediateRender: false,
-        },
-        0
-      )
-      .fromTo(
-        "#hero",
-        { opacity: 1, y: 0 },
-        {
-          opacity: 0,
-          y: -25,
-          duration: 1.0,
-          ease: "power2.inOut",
-          immediateRender: false,
-        },
-        0.1
-      )
-      .to(
-        expandingImageWrapperRef.current,
-        {
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          borderRadius: "0px",
-          duration: 1.8,
-          ease: "power2.inOut",
-        },
-        0
-      )
-      .fromTo(
-        imageOverlayRef.current,
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 1.8,
-          ease: "power2.inOut",
-        },
-        0
-      );
-
-      // Transition interactive pointer events and visibility
-      tl.set("#hero", { pointerEvents: "none" }, 0.9);
-      tl.set("#diagnostics", { pointerEvents: "auto", autoAlpha: 1 }, 1.0);
-
-        // PHASE 2: Reveal Section 2 (Header -> Cards -> Showcase)
-        tl.to(
-          diagHeaderRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.0,
-            ease: "power2.out",
-          },
-          1.2
-        )
-        .to(
-          diagCardsRef.current?.children || [],
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            stagger: 0.08,
-            duration: 1.1,
-            ease: "power2.out",
-          },
-          1.35
-        )
-        .to(
-          diagShowcaseRef.current,
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 1.2,
-            ease: "power2.out",
-          },
-          1.7
-        );
-
-        // PHASE 3: Hold Section 2 stationary during interaction
-        tl.to({}, { duration: 1.6 });
-
-        // PHASE 4: Section 3 Overlap Panel slides up over Section 2
-        if (overlapPanelRef.current) {
-          tl.fromTo(
-            overlapPanelRef.current,
-            {
-              yPercent: 100,
+          // ── STEP 2: Scroll Scrub Timeline ──
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              id: "hero-pin-trigger",
+              trigger: triggerContainerRef.current,
+              start: "top top",
+              end: "+=260%",
+              pin: true,
+              scrub: 0.6,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              onRefreshInit: () => {
+                const progress = ScrollTrigger.getById("hero-pin-trigger")?.progress || 0;
+                if (progress < 0.05) {
+                  updateMetrics();
+                }
+              },
             },
+          });
+
+          // PHASE 1: Hero Image expands & Hero text fades
+          tl.fromTo(
+            floatingContactRef.current,
+            { opacity: 1, y: 0, scale: 1 },
             {
-              yPercent: 0,
+              opacity: 0,
+              y: -18,
+              scale: 0.96,
+              duration: 0.65,
+              ease: "power2.out",
+              immediateRender: false,
+            },
+            0
+          )
+          .fromTo(
+            floatingBadgeRef.current,
+            { opacity: 1, y: 0, scale: 1 },
+            {
+              opacity: 0,
+              y: 20,
+              scale: 0.95,
+              duration: 0.75,
+              ease: "power2.out",
+              immediateRender: false,
+            },
+            0.05
+          )
+          .fromTo(
+            scrollPromptRef.current,
+            { opacity: 1 },
+            {
+              opacity: 0,
+              duration: 0.5,
+              ease: "power2.out",
+              immediateRender: false,
+            },
+            0
+          )
+          .fromTo(
+            "#hero",
+            { opacity: 1, y: 0 },
+            {
+              opacity: 0,
+              y: -25,
+              duration: 1.0,
               ease: "power2.inOut",
-              duration: 2.2,
-            }
+              immediateRender: false,
+            },
+            0.1
+          )
+          .to(
+            expandingImageWrapperRef.current,
+            {
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              borderRadius: "0px",
+              duration: 1.8,
+              ease: "power2.inOut",
+            },
+            0
+          )
+          .fromTo(
+            imageOverlayRef.current,
+            { opacity: 0 },
+            {
+              opacity: 1,
+              duration: 1.8,
+              ease: "power2.inOut",
+            },
+            0
           );
-        }
+
+          // Transition interactive pointer events and visibility
+          tl.set("#hero", { pointerEvents: "none" }, 0.9);
+          tl.set("#diagnostics", { pointerEvents: "auto", autoAlpha: 1 }, 1.0);
+
+          // PHASE 2: Reveal Section 2 (Header -> Cards -> Showcase)
+          tl.to(
+            diagHeaderRef.current,
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1.0,
+              ease: "power2.out",
+            },
+            1.2
+          )
+          .to(
+            diagCardsRef.current?.children || [],
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              stagger: 0.08,
+              duration: 1.1,
+              ease: "power2.out",
+            },
+            1.35
+          )
+          .to(
+            diagShowcaseRef.current,
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 1.2,
+              ease: "power2.out",
+            },
+            1.7
+          );
+
+          // PHASE 3: Hold Section 2 stationary during interaction
+          tl.to({}, { duration: 1.6 });
+
+          // PHASE 4: Section 3 Overlap Panel slides up over Section 2
+          if (overlapPanelRef.current) {
+            tl.fromTo(
+              overlapPanelRef.current,
+              {
+                yPercent: 100,
+              },
+              {
+                yPercent: 0,
+                ease: "power2.inOut",
+                duration: 2.2,
+              }
+            );
+          }
+        });
+
+        // ═══════════════════════════════════════════════════════
+        // MOBILE: (max-width: 1023px) -> Clean Native Vertical Scroll
+        // ═══════════════════════════════════════════════════════
+        mm.add("(max-width: 1023px)", () => {
+          gsap.set("#hero", { clearProps: "all" });
+          gsap.set("#diagnostics", { clearProps: "all", autoAlpha: 1 });
+          gsap.set(diagHeaderRef.current, { clearProps: "all", opacity: 1, y: 0 });
+          gsap.set(diagCardsRef.current?.children || [], { clearProps: "all", opacity: 1, y: 0, scale: 1 });
+          if (overlapPanelRef.current) {
+            gsap.set(overlapPanelRef.current, { clearProps: "all" });
+          }
+
+          // Entrance animation for mobile hero elements
+          gsap.fromTo(
+            heroLeftCtaRef.current,
+            { opacity: 0, y: 15 },
+            { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
+          );
+        });
 
       }, triggerContainerRef);
     };
@@ -436,8 +450,11 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
 
     setupAnimations();
 
+    let lastWidth = typeof window !== "undefined" ? window.innerWidth : 0;
     let resizeTimer: NodeJS.Timeout;
     const handleResize = () => {
+      if (typeof window !== "undefined" && window.innerWidth === lastWidth) return;
+      lastWidth = typeof window !== "undefined" ? window.innerWidth : 0;
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         ScrollTrigger.refresh();
@@ -482,12 +499,13 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
   return (
     <div
       ref={triggerContainerRef}
-      className="relative w-full h-screen overflow-hidden select-none bg-transparent"
+      className="relative w-full overflow-visible lg:h-screen lg:overflow-hidden select-none bg-transparent"
     >
       {/* ─────────────────────────────────────────────────────────
-          BACKGROUND LAYER: EXPANDING HERO IMAGE (Desktop only)
+          BACKGROUND LAYER: FIXED HERO IMAGE (Mobile & Desktop)
           Sits behind Section 1 and Section 2
           ───────────────────────────────────────────────────────── */}
+      {/* Desktop expanding canvas */}
       <div
         ref={expandingImageWrapperRef}
         className="hidden lg:block absolute rounded-[36px] overflow-hidden bg-[#F3F4F1] shadow-[0_16px_48px_rgba(0,0,0,0.08)] border border-black/5 z-0 will-change-[transform,width,height,top,left,border-radius]"
@@ -519,12 +537,14 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
         />
       </div>
 
+
+
       {/* ─────────────────────────────────────────────────────────
-          SECTION 1 — HERO LAYER (Foreground z-20)
+          SECTION 1 — HERO LAYER (Relative on Mobile, Absolute on Desktop)
           ───────────────────────────────────────────────────────── */}
       <section
         id="hero"
-        className="absolute inset-0 w-full h-full flex flex-col justify-start sm:justify-center pt-[148px] xs:pt-[160px] sm:pt-24 lg:pt-24 pb-4 sm:pb-8 lg:pb-10 z-20 pointer-events-auto"
+        className="relative lg:absolute lg:inset-0 w-full min-h-[90vh] sm:min-h-screen lg:h-full flex flex-col justify-start sm:justify-center pt-[136px] xs:pt-[144px] sm:pt-24 lg:pt-24 pb-8 sm:pb-8 lg:pb-10 z-20 pointer-events-auto"
       >
         <div className="container-editorial flex flex-col justify-start sm:flex-1 sm:justify-center sm:my-auto">
           <div className="container-inner flex flex-col justify-start sm:flex-1 sm:justify-center sm:my-auto">
@@ -541,24 +561,24 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
                     ADVANCED DENTAL CARE
                   </span>
 
-                  {/* Mobile Row: Headline + Subtitle on Left, Image Card on Right */}
+                  {/* Mobile Row: Headline + Subtitle on Left, Image Card on Right (Exact Reference Match) */}
                   <div className="flex items-start justify-between gap-3.5 sm:gap-4 w-full">
                     <div className="flex-1 flex flex-col max-w-[215px] sm:max-w-[500px]">
-                      <h1 className="text-[30px] xs:text-[34px] sm:text-4xl md:text-5xl lg:text-6xl xl:text-[70px] 2xl:text-[80px] font-serif text-[#111816] font-medium leading-[1.08] sm:leading-[1.05] tracking-tight">
+                      <h1 className="text-[28px] xs:text-[32px] sm:text-4xl md:text-5xl lg:text-6xl xl:text-[70px] 2xl:text-[80px] font-serif text-[#111816] font-medium leading-[1.08] sm:leading-[1.05] tracking-tight">
                         Caring for Your <br />
                         <span className="italic font-medium text-[#00A89E]">Smile,</span> One Visit <br />
                         at a Time.
                       </h1>
 
-                      <p className="text-[13px] xs:text-[14px] sm:text-base md:text-[19px] text-[#4A5568] font-sans font-normal leading-snug sm:leading-relaxed mt-3 sm:mt-6">
+                      <p className="text-[13px] xs:text-[14px] sm:text-base md:text-[19px] text-[#4A5568] font-sans font-normal leading-snug sm:leading-relaxed mt-2.5 sm:mt-6">
                         Your smile is more than just an expression, it&apos;s a reflection of your confidence, health, and happiness.
                       </p>
                     </div>
 
-                    {/* Mobile-only tall rounded hero image card */}
+                    {/* Mobile-only portrait doctor image card */}
                     <div
                       ref={mobileCardSlotRef}
-                      className="lg:hidden w-[136px] xs:w-[146px] sm:w-[170px] h-[182px] xs:h-[196px] sm:h-[215px] rounded-[28px] overflow-hidden shadow-[0_12px_36px_rgba(0,0,0,0.14)] border-2 border-white flex-shrink-0 relative bg-[#F3F4F1] mt-0.5"
+                      className="lg:hidden w-[130px] xs:w-[142px] sm:w-[170px] h-[178px] xs:h-[192px] sm:h-[215px] rounded-[24px] overflow-hidden shadow-[0_12px_32px_rgba(0,0,0,0.12)] border-2 border-white flex-shrink-0 relative bg-[#F3F4F1] mt-0.5"
                     >
                       <Image
                         src="/images/hero-smile.jpg"
@@ -680,13 +700,13 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
       </section>
 
       {/* ─────────────────────────────────────────────────────────
-          SECTION 2 — INTERACTIVE DIAGNOSTICS LAYER (Foreground z-20)
+          SECTION 2 — INTERACTIVE DIAGNOSTICS LAYER
           ───────────────────────────────────────────────────────── */}
-      <section
-        id="diagnostics"
-        className="absolute inset-0 w-full h-full flex flex-col justify-center pt-24 sm:pt-28 lg:pt-24 pb-6 sm:pb-8 lg:pb-10 z-20 pointer-events-none opacity-0 invisible"
-        style={{ opacity: 0, visibility: "hidden" }}
-      >
+      <div className="relative w-full lg:static">
+        <section
+          id="diagnostics"
+          className="relative lg:absolute lg:inset-0 w-full min-h-[90vh] sm:min-h-screen lg:h-screen flex flex-col justify-center pt-16 xs:pt-20 sm:pt-24 lg:pt-24 pb-14 xs:pb-16 sm:pb-12 lg:pb-10 z-10 lg:z-20 pointer-events-auto lg:pointer-events-none lg:opacity-0 lg:invisible bg-transparent overflow-hidden"
+        >
         <div
           className="container-editorial flex-1 flex flex-col justify-center my-auto"
           onMouseLeave={handleMouseLeaveSection}
@@ -883,25 +903,26 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
         </div>
       </div>
     </section>
+  </div>
 
       {/* ─────────────────────────────────────────────────────────
           SECTION 3 — OVERLAP PANEL (Children)
-          Slides up directly inside the pinned viewport over Section 2
           ───────────────────────────────────────────────────────── */}
       {children && (
         <div
           ref={overlapPanelRef}
           id="overlap-panel-wrapper"
-          className="absolute inset-0 w-full min-h-screen z-40 will-change-transform"
+          className="relative lg:absolute lg:inset-0 w-full h-auto lg:min-h-screen z-30 lg:z-40 transform-gpu [backface-visibility:hidden] [perspective:1000px] [-webkit-font-smoothing:antialiased]"
+          style={{ transform: "translateZ(0)" }}
         >
           {children}
         </div>
       )}
 
-      {/* Fixed Scroll to Explore indicator */}
+      {/* Fixed Scroll to Explore indicator (Desktop only) */}
       <div
         ref={scrollPromptRef}
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-1.5 opacity-70 hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        className="hidden lg:flex fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex-col items-center gap-1.5 opacity-70 hover:opacity-100 transition-opacity duration-300 pointer-events-none"
         aria-hidden="true"
       >
         <div className="w-4 h-7 rounded-full border border-black/40 flex justify-center pt-1.5">
