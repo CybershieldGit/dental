@@ -282,27 +282,27 @@ export default function DualActionSection() {
               {/* 3 Cost Output Boxes */}
               <div className="grid grid-cols-3 gap-3 sm:gap-4 p-5 sm:p-6 rounded-2xl bg-[#F8FAFC] border border-slate-200 mb-8 shadow-xs">
                 <div className="flex flex-col">
-                  <span className="text-[11px] sm:text-xs uppercase font-bold text-[#64748B] tracking-wider">Standard Cost</span>
+                  <span className="text-xs uppercase font-bold text-[#475569] tracking-wider">Standard Cost</span>
                   <span className="text-2xl sm:text-3xl font-serif font-bold text-[#0F172A] mt-1.5">
                     ₹{currentPlan.standard.toLocaleString()}
                   </span>
-                  <span className="text-xs text-[#64748B] mt-1 font-medium">Without Smile Plan</span>
+                  <span className="text-xs sm:text-[12.5px] text-[#475569] mt-1 font-semibold">Without Smile Plan</span>
                 </div>
 
                 <div className="flex flex-col border-l border-slate-200 pl-3 sm:pl-4">
-                  <span className="text-[11px] sm:text-xs uppercase font-bold text-[#008C84] tracking-wider">Smile Plan Cost</span>
+                  <span className="text-xs uppercase font-bold text-[#008C84] tracking-wider">Smile Plan Cost</span>
                   <span className="text-2xl sm:text-3xl font-serif font-bold text-[#008C84] mt-1.5">
                     ₹{currentPlan.plan.toLocaleString()}
                   </span>
-                  <span className="text-xs text-[#008C84] mt-1 font-semibold">With Membership</span>
+                  <span className="text-xs sm:text-[12.5px] text-[#008C84] mt-1 font-bold">With Membership</span>
                 </div>
 
                 <div className="flex flex-col border-l border-slate-200 pl-3 sm:pl-4">
-                  <span className="text-[11px] sm:text-xs uppercase font-bold text-[#0F172A] tracking-wider">Estimated Savings</span>
+                  <span className="text-xs uppercase font-bold text-[#0F172A] tracking-wider">Estimated Savings</span>
                   <span className="text-2xl sm:text-3xl font-serif font-bold text-[#0F172A] mt-1.5">
                     ₹{savings.toLocaleString()}
                   </span>
-                  <span className="inline-flex items-center text-xs font-bold text-[#008C84] bg-[#00A89E]/15 px-2 py-0.5 rounded mt-1 w-fit">
+                  <span className="inline-flex items-center text-xs font-bold text-[#008C84] bg-[#00A89E]/15 px-2.5 py-0.5 rounded-md mt-1 w-fit">
                     15% Savings
                   </span>
                 </div>
@@ -317,7 +317,7 @@ export default function DualActionSection() {
                 <span>Discuss My Treatment Plan</span>
                 <ArrowRight className="w-5 h-5" />
               </button>
-              <p className="text-xs font-medium text-center text-[#64748B] mt-3">
+              <p className="text-xs sm:text-[13px] font-semibold text-center text-[#475569] mt-3">
                 We typically respond within 2 hours
               </p>
             </div>

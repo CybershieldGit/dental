@@ -142,7 +142,7 @@ h4,
 /* Inner layout container: Responsive clamp max 1600px with consistent margin-inline: auto */
 .container-inner,
 .page-container {
-  width: calc(100% - 32px);
+  width: calc(100% - 48px);
   max-width: 1600px;
   margin-inline: auto;
   box-sizing: border-box;

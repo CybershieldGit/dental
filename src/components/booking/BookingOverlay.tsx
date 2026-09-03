@@ -116,13 +116,13 @@ export default function BookingOverlay() {
         {/* Header */}
         <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-black/8 flex items-center justify-between bg-white/70 backdrop-blur-md flex-shrink-0">
           <div>
-            <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.24em] text-[#00A89E] block mb-1">
+            <span className="text-xs font-bold uppercase tracking-[0.16em] text-[#008C84] block mb-1">
               {callbackRequest ? "RAPID INQUIRY" : "EXPERIENCE CLINICAL EXCELLENCE"}
             </span>
             <h2 id="booking-title" className="text-2xl sm:text-3xl font-serif text-[#111816] font-bold tracking-tight">
               {callbackRequest ? "Request a Callback" : "Book Consultation"}
             </h2>
-            <p className="text-xs sm:text-sm text-[#5A6B66] font-sans font-normal mt-0.5">
+            <p className="text-xs sm:text-sm text-[#334155] font-sans font-medium mt-0.5">
               {callbackRequest ? "Our specialists will reach out during clinical hours." : "Schedule a comprehensive examination with our lead doctors."}
             </p>
           </div>
@@ -142,10 +142,10 @@ export default function BookingOverlay() {
               <Check className="w-10 h-10" />
             </div>
             <div>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#00A89E]">CONFIRMATION SENT</span>
+              <span className="text-xs font-bold uppercase tracking-[0.16em] text-[#008C84]">CONFIRMATION SENT</span>
               <h3 className="text-3xl font-serif text-[#111816] font-bold mt-1">You are Provisionally Booked</h3>
             </div>
-            <p className="text-sm sm:text-base text-[#5A6B66] max-w-md font-sans leading-relaxed">
+            <p className="text-sm sm:text-base text-[#334155] max-w-md font-sans leading-relaxed">
               {callbackRequest
                 ? "Your callback request is recorded. A senior patient coordinator will phone you shortly."
                 : `Thank you, ${bookingState.name || "Patient"}. We have reserved ${bookingState.date} at ${bookingState.time}. Our clinic concierge will reach out to confirm your diagnostic slot.`}
@@ -153,7 +153,7 @@ export default function BookingOverlay() {
             <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm mt-4">
               <a
                 href={`tel:${clinic.phoneRaw}`}
-                className="flex-1 py-3.5 bg-[#00A89E] hover:bg-[#008C84] text-white text-center font-semibold rounded-full transition-all shadow-md text-sm"
+                className="flex-1 py-3.5 bg-[#00A89E] hover:bg-[#008C84] text-white text-center font-bold rounded-full transition-all shadow-md text-sm"
               >
                 Call Clinic
               </a>
@@ -162,7 +162,7 @@ export default function BookingOverlay() {
                   resetBooking();
                   closeOverlay();
                 }}
-                className="flex-1 py-3.5 border border-black/15 hover:bg-white text-[#111816] text-center font-medium rounded-full transition-all cursor-pointer text-sm"
+                className="flex-1 py-3.5 border border-black/15 hover:bg-white text-[#111816] text-center font-bold rounded-full transition-all cursor-pointer text-sm"
               >
                 Return to Site
               </button>
@@ -173,7 +173,7 @@ export default function BookingOverlay() {
           <form onSubmit={handleCallbackSubmit} className="flex-1 p-6 sm:p-8 flex flex-col justify-between overflow-y-auto">
             <div className="flex flex-col gap-5">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold uppercase tracking-wider text-[#5A6B66]">Your Name</label>
+                <label className="text-xs font-bold uppercase tracking-wider text-[#334155]">Your Name</label>
                 <input
                   required
                   name="name"
@@ -184,7 +184,7 @@ export default function BookingOverlay() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold uppercase tracking-wider text-[#5A6B66]">Contact Number</label>
+                <label className="text-xs font-bold uppercase tracking-wider text-[#334155]">Contact Number</label>
                 <input
                   required
                   name="phone"
@@ -195,10 +195,10 @@ export default function BookingOverlay() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold uppercase tracking-wider text-[#5A6B66]">Preferred Callback Window</label>
+                <label className="text-xs font-bold uppercase tracking-wider text-[#334155]">Preferred Callback Window</label>
                 <select
                   name="preferredTime"
-                  className="w-full px-4 py-3 bg-white border border-black/10 rounded-xl text-sm text-[#111816] focus:border-[#00A89E] focus:ring-2 focus:ring-[#00A89E]/20 focus:outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white border border-black/10 rounded-xl text-sm text-[#111816] focus:border-[#00A89E] focus:ring-2 focus:ring-[#00A89E]/20 focus:outline-none transition-all font-medium"
                 >
                   <option>Morning (10:00 AM - 1:00 PM)</option>
                   <option>Afternoon (1:00 PM - 4:00 PM)</option>
@@ -210,7 +210,7 @@ export default function BookingOverlay() {
             <button
               disabled={loading}
               type="submit"
-              className="w-full py-4 mt-8 bg-[#111816] hover:bg-[#00A89E] text-white font-semibold rounded-full transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-xl"
+              className="w-full py-4 mt-8 bg-[#111816] hover:bg-[#00A89E] text-white font-bold rounded-full transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-xl"
             >
               {loading ? "Registering Request..." : "Request Call Now"}
             </button>
@@ -219,17 +219,17 @@ export default function BookingOverlay() {
           /* Booking Step Flow */
           <div className="flex-1 flex flex-col justify-between overflow-hidden">
             {/* Step Indicators */}
-            <div className="px-6 sm:px-8 py-3.5 bg-white/60 border-b border-black/8 flex items-center justify-between text-xs font-semibold text-[#5A6B66] flex-shrink-0">
+            <div className="px-6 sm:px-8 py-3.5 bg-white/60 border-b border-black/8 flex items-center justify-between text-xs font-bold text-[#475569] flex-shrink-0">
               {STEPS.map((name, i) => (
                 <div key={name} className="flex items-center gap-2">
                   <span
                     className={cn(
-                      "w-6 h-6 rounded-full flex items-center justify-center border text-[11px] font-bold transition-all",
+                      "w-6 h-6 rounded-full flex items-center justify-center border text-xs font-bold transition-all",
                       step === i + 1
                         ? "bg-[#00A89E] text-white border-[#00A89E] shadow-sm ring-2 ring-[#00A89E]/20"
                         : step > i + 1
                         ? "bg-[#00A89E] text-white border-[#00A89E]"
-                        : "bg-transparent border-black/20 text-[#5A6B66]"
+                        : "bg-transparent border-black/20 text-[#64748B]"
                     )}
                   >
                     {step > i + 1 ? <Check className="w-3.5 h-3.5" /> : i + 1}
@@ -247,7 +247,7 @@ export default function BookingOverlay() {
                 <div className="flex flex-col gap-5">
                   <div>
                     <h3 className="text-xl font-serif text-[#111816] font-bold">What would you like assistance with?</h3>
-                    <p className="text-xs text-[#5A6B66] mt-1">Select your primary reason for visiting our clinic.</p>
+                    <p className="text-xs sm:text-[13px] text-[#334155] font-medium mt-1">Select your primary reason for visiting our clinic.</p>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {[
@@ -264,10 +264,10 @@ export default function BookingOverlay() {
                         className="w-full p-4 bg-white hover:bg-[#E6F7F5]/50 border border-black/8 hover:border-[#00A89E] rounded-2xl text-left transition-all duration-200 flex flex-col justify-between group cursor-pointer shadow-xs hover:shadow-md hover:-translate-y-0.5"
                       >
                         <div className="flex items-center justify-between w-full">
-                          <span className="text-sm font-bold text-[#111816] group-hover:text-[#00A89E] transition-colors">{item.title}</span>
-                          <ChevronRight className="w-4 h-4 text-[#718096] group-hover:text-[#00A89E] group-hover:translate-x-1 transition-all" />
+                          <span className="text-sm sm:text-[15px] font-bold text-[#111816] group-hover:text-[#008C84] transition-colors">{item.title}</span>
+                          <ChevronRight className="w-4 h-4 text-[#94A3B8] group-hover:text-[#00A89E] group-hover:translate-x-1 transition-all" />
                         </div>
-                        <span className="text-[11px] text-[#5A6B66] font-medium mt-1">{item.subtitle}</span>
+                        <span className="text-xs text-[#334155] font-medium mt-1">{item.subtitle}</span>
                       </button>
                     ))}
                   </div>

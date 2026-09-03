@@ -246,24 +246,24 @@ export default function ClinicalAuthority() {
         </div>
 
         {/* Section Header: Matches Wireframe "About The doctor" banner (Single doctor, no pills) */}
-        <div className="flex flex-col items-start gap-2 mb-10 sm:mb-12 max-w-3xl">
-          <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#00A89E] block">
+        <div className="flex flex-col items-start gap-1.5 sm:gap-2 mb-6 sm:mb-12 max-w-3xl">
+          <span className="text-[12px] xs:text-[13px] sm:text-xs font-semibold uppercase tracking-[0.20em] sm:tracking-[0.24em] text-[#00A89E] block">
             CLINICAL DIRECTOR & LEAD SURGEON
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-[44px] xl:text-[48px] font-serif text-[#111816] font-medium leading-[1.08] tracking-tight">
+          <h2 className="text-[30px] xs:text-[34px] sm:text-4xl lg:text-[44px] xl:text-[48px] font-serif text-[#111816] font-medium leading-[1.08] tracking-tight">
             About The Doctor
           </h2>
-          <p className="text-sm sm:text-base md:text-[17px] text-[#4A5568] font-sans font-normal leading-relaxed max-w-xl">
+          <p className="text-[16px] xs:text-[17px] sm:text-base md:text-[17px] text-[#2D3748] sm:text-[#4A5568] font-sans font-medium sm:font-normal leading-[1.55] sm:leading-relaxed max-w-xl">
             Meet our founder and clinical director, leading precision guided dental surgery and restorative care with 16+ years of international expertise.
           </p>
         </div>
 
         {/* Wireframe Layout: Left Doctor Cutout (No Blue Box) + Right About & Achievements */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center relative">
           
           {/* LEFT: Pure Doctor Cutout (z-index: 10 so plane wraps in front and behind) (5 cols) */}
           <div className="lg:col-span-5 flex flex-col justify-end items-center relative z-10">
-            <div className="relative w-full h-[360px] sm:h-[480px] lg:h-[500px] xl:h-[600px] flex flex-col justify-end items-center">
+            <div className="relative w-full h-[320px] xs:h-[350px] sm:h-[480px] lg:h-[500px] xl:h-[600px] flex flex-col justify-end items-center">
               
               {/* Mobile Dedicated Plane Wrapper (Directly inside doctor cutout container) */}
               <div className="mobile-plane-wrapper lg:hidden absolute inset-0 pointer-events-none z-30 select-none overflow-visible transition-[z-index] duration-75">
@@ -325,21 +325,21 @@ export default function ClinicalAuthority() {
               </div>
 
               {/* Floating Doctor Info Glass Card at Bottom */}
-              <div className="w-full max-w-[420px] relative z-20 bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-black/8 shadow-[0_12px_32px_rgba(0,0,0,0.08)] mt-[-30px]">
+              <div className="w-full relative z-20 bg-white/95 backdrop-blur-md rounded-2xl p-4 sm:p-4 border border-black/8 shadow-[0_12px_32px_rgba(0,0,0,0.08)] mt-[-24px] sm:mt-[-30px]">
                 <div className="flex items-center justify-between">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] uppercase tracking-wider text-[#00A89E] font-bold">
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-xs sm:text-[11px] uppercase tracking-wider text-[#008C84] font-bold">
                       {activeDoc.experience} Clinical Mastery
                     </span>
-                    <h3 className="text-lg sm:text-xl font-serif font-bold text-[#111816] leading-tight mt-0.5">
+                    <h3 className="text-[19px] sm:text-xl font-serif font-bold text-[#111816] leading-tight mt-0.5 truncate">
                       {activeDoc.name}
                     </h3>
                   </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#E6F7F5] text-[#00A89E]">
+                  <span className="text-xs sm:text-[13px] font-bold px-3 py-1 rounded-full bg-[#E6F7F5] text-[#008C84] flex-shrink-0">
                     Lead Dentist
                   </span>
                 </div>
-                <p className="text-[11px] text-[#5A6B66] mt-1 font-sans truncate">
+                <p className="text-xs sm:text-[12.5px] text-[#334155] font-semibold mt-1 font-sans truncate">
                   {activeDoc.qualifications}
                 </p>
               </div>
@@ -347,42 +347,42 @@ export default function ClinicalAuthority() {
           </div>
 
           {/* RIGHT: About The Doctor + Achievements & Qualifications (7 cols) */}
-          <div className="lg:col-span-7 flex flex-col justify-between rounded-3xl bg-white border border-black/8 shadow-[0_16px_40px_rgba(0,0,0,0.06)] p-6 sm:p-8 lg:p-10 relative">
+          <div className="lg:col-span-7 flex flex-col justify-between rounded-2xl sm:rounded-3xl bg-white border border-black/8 shadow-[0_16px_40px_rgba(0,0,0,0.06)] p-5 sm:p-8 lg:p-10 relative">
             
             {/* Top Right Landing Target Indicator Accent */}
-            <div className="absolute top-6 right-6 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E6F7F5] border border-[#00A89E]/20 text-[10px] font-bold text-[#00A89E] uppercase tracking-wider">
+            <div className="absolute top-5 sm:top-6 right-5 sm:right-6 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E6F7F5] border border-[#00A89E]/20 text-xs font-bold text-[#008C84] uppercase tracking-wider">
               <span>Verified Care</span>
             </div>
             
             {/* Top: Doctor Biography & Clinical Approach */}
             <div>
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-2.5 sm:mb-3">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#00A89E]" />
-                <span className="text-xs font-bold uppercase tracking-wider text-[#00A89E]">
+                <span className="text-xs sm:text-[13px] font-bold uppercase tracking-wider text-[#008C84]">
                   CLINICAL BIOGRAPHY & PRACTICE
                 </span>
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-serif text-[#111816] font-bold leading-snug mb-4">
+              <h3 className="text-[26px] sm:text-3xl font-serif text-[#111816] font-bold leading-snug mb-3 sm:mb-4">
                 {activeDoc.name}
               </h3>
 
-              <p className="text-sm sm:text-base text-[#4A5568] leading-relaxed mb-6 font-sans">
+              <p className="text-[16px] sm:text-base text-[#334155] leading-[1.6] sm:leading-relaxed mb-5 sm:mb-6 font-sans font-normal">
                 {activeDoc.bio}
               </p>
 
               {/* Core Clinical Focus Areas */}
-              <div className="mb-8">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#111816] block mb-3">
+              <div className="mb-6 sm:mb-8">
+                <span className="text-[13px] sm:text-xs font-bold uppercase tracking-wider text-[#111816] block mb-3">
                   Specialized Areas of Focus:
                 </span>
                 <div className="flex flex-wrap gap-2.5">
                   {activeDoc.interests.map((interest, idx) => (
                     <span
                       key={idx}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#E6F7F5] text-[#00A89E] text-xs font-semibold border border-[#00A89E]/20"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#E6F7F5] text-[#008C84] text-[13.5px] sm:text-xs font-bold border border-[#00A89E]/20"
                     >
-                      <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 sm:w-3.5 sm:h-3.5 flex-shrink-0" />
                       <span>{interest}</span>
                     </span>
                   ))}
@@ -391,12 +391,12 @@ export default function ClinicalAuthority() {
             </div>
 
             {/* Middle: Wireframe "achievements and qualification" 4-Card Grid */}
-            <div className="pt-6 border-t border-black/8">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#111816]">
+            <div className="pt-5 sm:pt-6 border-t border-black/8">
+              <div className="flex items-center justify-between mb-3.5 sm:mb-4">
+                <span className="text-[13px] sm:text-xs font-bold uppercase tracking-wider text-[#111816]">
                   Achievements & Qualifications
                 </span>
-                <span className="text-[11px] text-[#718096]">
+                <span className="text-xs text-[#475569] font-bold">
                   Verified Credentials
                 </span>
               </div>
@@ -407,17 +407,20 @@ export default function ClinicalAuthority() {
                   return (
                     <div
                       key={idx}
-                      className="p-3.5 rounded-2xl bg-[#F8FAF9] border border-black/5 flex flex-col justify-between min-h-[100px]"
+                      className="p-3.5 rounded-2xl bg-[#F8FAF9] border border-black/5 flex flex-col justify-between min-h-[108px]"
                     >
                       <div className="p-1.5 rounded-lg bg-white w-fit text-[#00A89E] shadow-2xs border border-black/5 mb-2">
                         <Icon className="w-4 h-4" />
                       </div>
                       <div>
-                        <span className="text-xs sm:text-sm font-serif font-bold text-[#111816] block leading-tight truncate">
+                        <span className="text-[15px] sm:text-[16px] font-serif font-bold text-[#111816] block leading-tight truncate">
                           {item.value}
                         </span>
-                        <span className="text-[10px] text-[#718096] font-medium block mt-0.5 leading-tight truncate">
+                        <span className="text-xs text-[#334155] font-semibold block mt-1 leading-tight">
                           {item.label}
+                        </span>
+                        <span className="text-[11px] text-[#64748B] font-medium block mt-0.5 leading-tight truncate">
+                          {item.desc}
                         </span>
                       </div>
                     </div>
@@ -429,7 +432,7 @@ export default function ClinicalAuthority() {
               <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
                 <button
                   onClick={handleConsultDoctor}
-                  className="w-full sm:flex-1 py-4 px-6 min-h-[50px] rounded-xl bg-[#00A89E] hover:bg-[#008C84] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer shadow-[0_4px_16px_rgba(0,168,158,0.25)] hover:shadow-[0_6px_22px_rgba(0,168,158,0.4)]"
+                  className="w-full sm:flex-1 py-3.5 sm:py-4 px-6 min-h-[48px] sm:min-h-[50px] rounded-xl bg-[#00A89E] hover:bg-[#008C84] text-white text-[15px] xs:text-[16px] sm:text-sm font-bold tracking-wide transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer shadow-[0_4px_16px_rgba(0,168,158,0.25)] hover:shadow-[0_6px_22px_rgba(0,168,158,0.4)]"
                 >
                   <Calendar className="w-4 h-4" />
                   <span>Book Consultation with {activeDoc.name.split(" ")[1] || "Doctor"}</span>
@@ -438,7 +441,7 @@ export default function ClinicalAuthority() {
 
                 <Link
                   href="/about"
-                  className="w-full sm:w-auto py-4 px-6 min-h-[50px] rounded-xl bg-[#111816] hover:bg-black text-white text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 inline-flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto py-3.5 sm:py-4 px-6 min-h-[48px] sm:min-h-[50px] rounded-xl bg-[#111816] hover:bg-black text-white text-[15px] xs:text-[16px] sm:text-sm font-bold tracking-wide transition-all duration-300 inline-flex items-center justify-center gap-2"
                 >
                   <span>About Our Clinic</span>
                   <ArrowUpRight className="w-4 h-4" />

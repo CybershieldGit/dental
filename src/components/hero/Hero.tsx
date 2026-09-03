@@ -51,9 +51,9 @@ export default function Hero() {
             {/* Left Column: Heading, Subtitle, CTA, and Feature Metrics */}
             <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-start sm:justify-between h-auto sm:h-full py-2 sm:py-4 lg:py-6 gap-6 sm:gap-0">
               
-              {/* Top / Middle Typography Block */}
+                {/* Top / Middle Typography Block */}
               <div className="flex flex-col items-start sm:my-auto">
-                <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#00A89E] mb-3 sm:mb-4 block">
+                <span className="text-xs sm:text-[13px] font-bold uppercase tracking-[0.16em] text-[#008C84] mb-3 sm:mb-4 block">
                   ADVANCED DENTAL CARE
                 </span>
 
@@ -63,7 +63,7 @@ export default function Hero() {
                   at a Time.
                 </h1>
 
-                <p className="text-base sm:text-lg md:text-[19px] text-[#4A5568] font-sans font-normal leading-relaxed max-w-[500px] mt-5 sm:mt-6">
+                <p className="text-base sm:text-lg md:text-[19px] text-[#334155] font-sans font-normal leading-relaxed max-w-[500px] mt-5 sm:mt-6">
                   Your smile is more than just an expression, it&apos;s a reflection of your confidence, health, and happiness.
                 </p>
 
@@ -90,14 +90,14 @@ export default function Hero() {
                         idx > 0 ? "sm:border-l sm:border-black/10 sm:pl-3 lg:pl-4" : ""
                       }`}
                     >
-                      <div className="p-1.5 sm:p-2 rounded-lg bg-[#E6F7F5] text-[#00A89E] flex-shrink-0">
-                        <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      <div className="p-2 rounded-xl bg-[#E6F7F5] text-[#00A89E] flex-shrink-0">
+                        <Icon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                       </div>
                       <div className="flex flex-col min-w-0">
-                        <span className="text-xs sm:text-[13px] font-bold text-[#111816] uppercase tracking-tight leading-tight whitespace-nowrap">
+                        <span className="text-xs sm:text-sm font-bold text-[#111816] uppercase tracking-tight leading-tight whitespace-nowrap">
                           {item.stat}
                         </span>
-                        <span className="text-[10px] sm:text-[11px] text-[#5A6B66] font-medium leading-tight mt-0.5 whitespace-nowrap">
+                        <span className="text-xs sm:text-[12.5px] text-[#334155] font-medium leading-tight mt-0.5 whitespace-nowrap">
                           {item.label}
                         </span>
                       </div>
@@ -132,36 +132,36 @@ export default function Hero() {
                 </button>
 
                 {/* Glassmorphic Product / Feature Card Overlay */}
-                <div className="absolute top-[35%] left-5 sm:left-7 z-20 max-w-[210px] sm:max-w-[230px] rounded-2xl bg-white/80 backdrop-blur-xl border border-white/80 p-4 shadow-[0_16px_36px_rgba(0,0,0,0.12)] transition-transform duration-500 hover:scale-105">
+                <div className="absolute top-[35%] left-5 sm:left-7 z-20 max-w-[220px] sm:max-w-[240px] rounded-2xl bg-white/95 backdrop-blur-xl border border-white/80 p-4 shadow-[0_16px_36px_rgba(0,0,0,0.12)] transition-transform duration-500 hover:scale-105">
                   {/* Top Bar with 3 Window Dots */}
-                  <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-black/10">
+                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-black/10">
                     <div className="flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-[#EF4444]/80" />
                       <span className="w-2 h-2 rounded-full bg-[#F59E0B]/80" />
                       <span className="w-2 h-2 rounded-full bg-[#10B981]/80" />
                     </div>
-                    <span className="text-[10px] font-semibold text-[#5A6B66] uppercase tracking-wider">
+                    <span className="text-[11px] font-bold text-[#008C84] uppercase tracking-wider">
                       Care Feature
                     </span>
                   </div>
 
                   {/* Title */}
-                  <h4 className="text-sm font-serif font-bold text-[#111816] leading-tight">
+                  <h4 className="text-[15px] font-serif font-bold text-[#111816] leading-tight">
                     Glowing Smile
                   </h4>
-                  <p className="text-[11px] text-[#5A6B66] mt-0.5 font-medium">
+                  <p className="text-xs text-[#334155] mt-0.5 font-medium">
                     Laser Tech & Whitening
                   </p>
 
                   {/* Specification Badges */}
                   <div className="grid grid-cols-2 gap-2 mt-3 pt-2.5 border-t border-black/5">
                     <div className="flex flex-col">
-                      <span className="text-[9px] text-[#718096] uppercase font-medium">Treatment</span>
-                      <span className="text-[11px] font-bold text-[#111816]">Painless</span>
+                      <span className="text-[10px] text-[#475569] uppercase font-bold tracking-wider">Treatment</span>
+                      <span className="text-xs font-bold text-[#111816]">Painless</span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[9px] text-[#718096] uppercase font-medium">Comfort</span>
-                      <span className="text-[11px] font-bold text-[#111816]">Boutique</span>
+                      <span className="text-[10px] text-[#475569] uppercase font-bold tracking-wider">Comfort</span>
+                      <span className="text-xs font-bold text-[#111816]">Boutique</span>
                     </div>
                   </div>
                 </div>
@@ -175,13 +175,13 @@ export default function Hero() {
 
       {/* Fixed Scroll to Explore indicator */}
       <div
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-1.5 opacity-70 hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-1.5 opacity-85 hover:opacity-100 transition-opacity duration-300 pointer-events-none"
         aria-hidden="true"
       >
-        <div className="w-4 h-7 rounded-full border border-black/40 flex justify-center pt-1.5">
+        <div className="w-4 h-7 rounded-full border border-black/50 flex justify-center pt-1.5">
           <div className="w-1 h-1.5 bg-[#00A89E] rounded-full animate-bounce" />
         </div>
-        <span className="text-[9px] tracking-[0.3em] uppercase text-[#111816]/70 font-semibold">
+        <span className="text-[11px] tracking-[0.16em] uppercase text-[#111816] font-bold">
           SCROLL TO EXPLORE
         </span>
       </div>

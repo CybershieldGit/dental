@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
+import Image from "next/image";
 import { treatments } from "@/data/treatments";
 import { useOverlay } from "../layout/OverlayProvider";
-import { X, Calendar, Check, ShieldCheck } from "lucide-react";
+import { X, Check, ShieldCheck, Clock, UserCheck, Sparkles, ArrowRight } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 
 export default function TreatmentOverlay() {
@@ -13,7 +14,13 @@ export default function TreatmentOverlay() {
   useEffect(() => {
     if (activeOverlay === "treatment") {
       containerRef.current?.focus();
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
     }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
   }, [activeOverlay]);
 
   if (activeOverlay !== "treatment" || !activeDetailSlug) return null;
@@ -27,119 +34,136 @@ export default function TreatmentOverlay() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
-      {/* Backdrop */}
+    <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6 lg:p-8 pointer-events-auto">
+      {/* Editorial Blurred Backdrop */}
       <div
-        className="absolute inset-0 bg-spruce-deep/70 backdrop-blur-sm transition-opacity duration-500"
+        className="fixed inset-0 bg-[#111816]/60 backdrop-blur-md transition-opacity duration-300"
         onClick={closeOverlay}
       />
 
-      {/* Slide drawer panel */}
+      {/* Luxury Editorial Modal Card */}
       <div
         ref={containerRef}
         tabIndex={-1}
-        className="relative w-full max-w-[800px] h-full bg-alabaster shadow-overlay flex flex-col justify-between overflow-y-auto focus:outline-none"
+        className="relative w-full max-w-[760px] max-h-[88vh] bg-[#FFFFF0] text-[#111816] rounded-[32px] sm:rounded-[36px] shadow-[0_32px_80px_rgba(0,0,0,0.28),0_4px_24px_rgba(0,0,0,0.08)] border border-black/10 flex flex-col justify-between overflow-hidden focus:outline-none z-10 animate-in fade-in zoom-in-95 duration-300"
         role="dialog"
         aria-modal="true"
         aria-labelledby="treatment-overlay-title"
       >
         {/* Header */}
-        <div className="p-6 md:p-8 border-b border-border flex items-center justify-between">
+        <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-black/8 flex items-start justify-between bg-white/70 backdrop-blur-md flex-shrink-0">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-clinical-green bg-clinical-green/10 px-2.5 py-1 rounded">
-              {treatment.category}
-            </span>
-            <h2 id="treatment-overlay-title" className="text-3xl font-serif text-spruce font-bold mt-2">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs font-bold uppercase tracking-[0.16em] text-[#008C84] bg-[#E6F7F5] px-2.5 py-0.5 rounded-full">
+                {treatment.category}
+              </span>
+              <span className="text-xs text-[#475569] font-semibold">Specialized Care</span>
+            </div>
+            <h2 id="treatment-overlay-title" className="text-2xl sm:text-3xl font-serif text-[#111816] font-bold tracking-tight">
               {treatment.title}
             </h2>
           </div>
           <button
             onClick={closeOverlay}
-            className="p-2 text-text-secondary hover:text-spruce hover:bg-paper rounded-full transition-colors cursor-pointer"
+            className="w-10 h-10 rounded-full bg-black/5 hover:bg-black/10 text-[#111816] flex items-center justify-center transition-all duration-200 cursor-pointer hover:rotate-90 flex-shrink-0"
             aria-label="Close treatment details"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Content Body */}
-        <div className="flex-1 p-6 md:p-8 flex flex-col gap-8">
-          <div>
-            <p className="text-lg font-serif text-text-primary italic leading-relaxed">
-              &ldquo;{treatment.shortDescription}&rdquo;
-            </p>
+        {/* Scrollable Content Body */}
+        <div className="flex-1 p-6 sm:p-8 overflow-y-auto flex flex-col gap-6">
+          {/* Visual Showcase Card */}
+          <div className="relative w-full h-[180px] sm:h-[210px] rounded-2xl overflow-hidden shadow-sm border border-black/8 bg-slate-100 flex-shrink-0">
+            <Image
+              src={treatment.image}
+              alt={treatment.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 760px"
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4 text-white">
+              <p className="text-sm sm:text-base font-serif italic text-white/95 leading-snug max-w-xl">
+                &ldquo;{treatment.shortDescription}&rdquo;
+              </p>
+            </div>
+          </div>
+
+          {/* 3 Quick Spec Badges */}
+          <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+            <div className="bg-white p-3 rounded-xl border border-black/6 flex flex-col">
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#475569]">Timeline</span>
+              <span className="text-xs sm:text-[13px] font-bold text-[#111816] mt-0.5 truncate">{treatment.timeline}</span>
+            </div>
+            <div className="bg-white p-3 rounded-xl border border-black/6 flex flex-col">
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#475569]">Lead Doctor</span>
+              <span className="text-xs sm:text-[13px] font-bold text-[#111816] mt-0.5 truncate">{treatment.doctor}</span>
+            </div>
+            <div className="bg-white p-3 rounded-xl border border-black/6 flex flex-col">
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-[#475569]">Estimated Fee</span>
+              <span className="text-xs sm:text-[13px] font-bold text-[#008C84] mt-0.5 truncate">{treatment.estimatedCostRange}</span>
+            </div>
           </div>
 
           {/* Section: Who it is for */}
-          <div className="flex flex-col gap-3">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Who it is for</h3>
-            <ul className="flex flex-col gap-2.5 text-sm text-text-primary">
+          <div className="bg-white p-5 rounded-2xl border border-black/6">
+            <span className="text-xs font-bold uppercase tracking-[0.16em] text-[#008C84] block mb-3">
+              PATIENT INDICATIONS
+            </span>
+            <ul className="flex flex-col gap-2.5">
               {treatment.whoItIsFor.map((item, idx) => (
-                <li key={idx} className="flex items-start gap-2.5">
-                  <Check className="w-4.5 h-4.5 text-clinical-green mt-0.5 shrink-0" />
+                <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#1E293B] font-medium leading-snug">
+                  <div className="w-4.5 h-4.5 rounded-full bg-[#E6F7F5] text-[#008C84] flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Check className="w-3 h-3" />
+                  </div>
                   <span>{item}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Section: Clinical Steps */}
-          <div className="flex flex-col gap-4">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-text-secondary">The Clinical Steps</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Section: The Clinical Steps */}
+          <div>
+            <span className="text-xs font-bold uppercase tracking-[0.16em] text-[#008C84] block mb-3">
+              CLINICAL MILESTONES
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {treatment.steps.map((step, idx) => (
-                <div key={idx} className="bg-paper border border-border/80 rounded-xl p-4 flex gap-3.5">
-                  <span className="text-lg font-serif font-bold text-gold shrink-0">0{idx + 1}</span>
-                  <div>
-                    <h4 className="text-sm font-bold text-spruce mb-1">{step.title}</h4>
-                    <p className="text-xs text-text-secondary leading-relaxed">{step.desc}</p>
+                <div key={idx} className="bg-white border border-black/8 rounded-xl p-4 flex gap-3 shadow-2xs">
+                  <span className="text-sm font-mono font-bold text-[#008C84] bg-[#E6F7F5] w-7 h-7 rounded-md flex items-center justify-center shrink-0">
+                    0{idx + 1}
+                  </span>
+                  <div className="min-w-0">
+                    <h4 className="text-xs sm:text-sm font-serif font-bold text-[#111816] mb-0.5">{step.title}</h4>
+                    <p className="text-[11.5px] sm:text-xs text-[#475569] leading-relaxed font-sans">{step.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Section: Quick specs */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-b border-border py-6 my-2 text-sm">
-            <div>
-              <span className="text-xs text-text-secondary block mb-1">Expected Timeline</span>
-              <span className="font-semibold text-text-primary">{treatment.timeline}</span>
-            </div>
-            <div>
-              <span className="text-xs text-text-secondary block mb-1">Lead Specialist</span>
-              <span className="font-semibold text-text-primary">{treatment.doctor}</span>
-            </div>
-            <div>
-              <span className="text-xs text-text-secondary block mb-1">Modern Technology</span>
-              <div className="flex flex-wrap gap-1 mt-1">
-                {treatment.technologies.map((t) => (
-                  <span key={t} className="text-[10px] bg-paper text-text-primary border border-border px-1.5 py-0.5 rounded">
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-warm-tint/50 border border-gold/10 rounded-xl p-4 flex gap-3 text-xs text-text-secondary">
-            <ShieldCheck className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-            <p>
-              Note: Estimated investment ranges from <span className="font-semibold text-text-primary">{treatment.estimatedCostRange}</span>. 
-              Actual diagnostic parameters and treatment requirements will be determined during physical consultation.
+          {/* Consultation Note */}
+          <div className="bg-[#E6F7F5]/70 border border-[#00A89E]/20 rounded-xl p-3.5 flex gap-2.5 text-xs text-[#334155]">
+            <ShieldCheck className="w-4.5 h-4.5 text-[#008C84] shrink-0 mt-0.5" />
+            <p className="leading-relaxed">
+              Every procedure is preceded by high-resolution 3D CBCT imaging to ensure exact anatomical safety.
             </p>
           </div>
         </div>
 
         {/* Footer Actions */}
-        <div className="p-6 bg-paper border-t border-border flex items-center justify-between">
-          <div className="text-xs text-text-secondary">
-            Questions? Call us or book online.
-          </div>
+        <div className="px-6 sm:px-8 py-4 sm:py-5 bg-white/70 backdrop-blur-md border-t border-black/8 flex items-center justify-between gap-4 flex-shrink-0">
+          <span className="text-xs text-[#475569] font-medium hidden sm:inline">
+            Have questions about this procedure?
+          </span>
           <button
             onClick={handleBookClick}
-            className="px-6 py-3 bg-spruce hover:bg-clinical-green text-alabaster text-sm font-semibold rounded-lg transition-editorial cursor-pointer"
+            className="w-full sm:w-auto px-7 py-3 min-h-[46px] bg-[#00A89E] hover:bg-[#008C84] text-white text-sm font-bold rounded-full transition-all duration-300 cursor-pointer shadow-[0_4px_14px_rgba(0,168,158,0.25)] hover:shadow-[0_6px_20px_rgba(0,168,158,0.4)] flex items-center justify-center gap-2"
           >
-            Request Provisional Slot
+            <span>Book Consultation</span>
+            <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </div>

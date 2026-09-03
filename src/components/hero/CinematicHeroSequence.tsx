@@ -466,6 +466,10 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
     return () => {
       window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimer);
+      const pinTrigger = ScrollTrigger.getById("hero-pin-trigger");
+      if (pinTrigger) {
+        pinTrigger.kill(true);
+      }
       if (ctx) ctx.revert();
     };
   }, []);
@@ -544,7 +548,7 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           ───────────────────────────────────────────────────────── */}
       <section
         id="hero"
-        className="relative lg:absolute lg:inset-0 w-full min-h-[90vh] sm:min-h-screen lg:h-full flex flex-col justify-start sm:justify-center pt-[136px] xs:pt-[144px] sm:pt-24 lg:pt-24 pb-8 sm:pb-8 lg:pb-10 z-20 pointer-events-auto"
+        className="relative lg:absolute lg:inset-0 w-full min-h-0 lg:h-full flex flex-col justify-start sm:justify-center pt-[88px] xs:pt-[96px] sm:pt-24 lg:pt-24 pb-8 sm:pb-8 lg:pb-10 z-20 pointer-events-auto"
       >
         <div className="container-editorial flex flex-col justify-start sm:flex-1 sm:justify-center sm:my-auto">
           <div className="container-inner flex flex-col justify-start sm:flex-1 sm:justify-center sm:my-auto">
@@ -553,32 +557,31 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
               {/* Left Column: Heading, Subtitle, CTA, and Feature Metrics */}
               <div
                 ref={heroContentRef}
-                className="lg:col-span-6 xl:col-span-6 flex flex-col justify-start sm:justify-between h-auto sm:h-full min-h-0 sm:min-h-[580px] lg:min-h-0 pt-0 pb-2 sm:py-4 lg:py-6 gap-5 sm:gap-0"
+                className="lg:col-span-6 xl:col-span-6 flex flex-col justify-start sm:justify-between h-auto sm:h-full min-h-0 sm:min-h-[580px] lg:min-h-0 pt-0 pb-2 sm:py-4 lg:py-6 gap-0"
               >
                 {/* Top / Middle Typography Block + Mobile Inline Image (Reference Match) */}
                 <div className="flex flex-col items-start sm:my-auto w-full relative">
-                  <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#00A89E] mb-1 sm:mb-4 block">
+                  <span className="text-xs sm:text-[13px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-[#008C84] mb-2 sm:mb-4 block">
                     ADVANCED DENTAL CARE
                   </span>
 
-                  {/* Mobile Row: Headline + Subtitle on Left, Image Card on Right (Exact Reference Match) */}
-                  <div className="flex items-start justify-between gap-3.5 sm:gap-4 w-full">
-                    <div className="flex-1 flex flex-col max-w-[215px] sm:max-w-[500px]">
-                      <h1 className="text-[28px] xs:text-[32px] sm:text-4xl md:text-5xl lg:text-6xl xl:text-[70px] 2xl:text-[80px] font-serif text-[#111816] font-medium leading-[1.08] sm:leading-[1.05] tracking-tight">
-                        Caring for Your <br />
-                        <span className="italic font-medium text-[#00A89E]">Smile,</span> One Visit <br />
-                        at a Time.
-                      </h1>
+                  {/* Headline */}
+                  <h1 className="text-[34px] xs:text-[38px] sm:text-4xl md:text-5xl lg:text-6xl xl:text-[70px] 2xl:text-[80px] font-serif text-[#111816] font-medium leading-[1.06] sm:leading-[1.05] tracking-tight w-full">
+                    Caring for Your <br />
+                    <span className="italic font-medium text-[#00A89E]">Smile,</span> One Visit <br />
+                    at a Time.
+                  </h1>
 
-                      <p className="text-[13px] xs:text-[14px] sm:text-base md:text-[19px] text-[#4A5568] font-sans font-normal leading-snug sm:leading-relaxed mt-2.5 sm:mt-6">
-                        Your smile is more than just an expression, it&apos;s a reflection of your confidence, health, and happiness.
-                      </p>
-                    </div>
+                  {/* Mobile Row: Paragraph on Left, Image Card on Right next to it */}
+                  <div className="flex items-center justify-between gap-3 sm:gap-4 w-full mt-3 sm:mt-6">
+                    <p className="flex-1 text-[16px] xs:text-[17px] sm:text-base md:text-[19px] text-[#2D3748] font-sans font-medium leading-[1.5] sm:leading-relaxed">
+                      Your smile is more than just an expression, it&apos;s a reflection of your confidence, health, and happiness.
+                    </p>
 
-                    {/* Mobile-only portrait doctor image card */}
+                    {/* Mobile-only portrait doctor image card next to text */}
                     <div
                       ref={mobileCardSlotRef}
-                      className="lg:hidden w-[130px] xs:w-[142px] sm:w-[170px] h-[178px] xs:h-[192px] sm:h-[215px] rounded-[24px] overflow-hidden shadow-[0_12px_32px_rgba(0,0,0,0.12)] border-2 border-white flex-shrink-0 relative bg-[#F3F4F1] mt-0.5"
+                      className="lg:hidden w-[118px] xs:w-[130px] sm:w-[170px] h-[148px] xs:h-[162px] sm:h-[215px] rounded-[22px] overflow-hidden shadow-[0_10px_28px_rgba(0,0,0,0.1)] border-2 border-white flex-shrink-0 relative bg-[#F3F4F1]"
                     >
                       <Image
                         src="/images/hero-smile.jpg"
@@ -595,11 +598,11 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
                   {/* CTA Pill Button */}
                   <div
                     ref={heroLeftCtaRef}
-                    className="mt-6 sm:mt-8 lg:mt-10"
+                    className="mt-5 sm:mt-8 lg:mt-10"
                   >
                     <button
                       onClick={handleBookClick}
-                      className="px-6 sm:px-9 py-3.5 sm:py-4 min-h-[50px] sm:min-h-[58px] bg-[#111816] hover:bg-[#00A89E] text-white text-xs sm:text-base font-semibold rounded-full transition-all duration-300 inline-flex items-center justify-center gap-2.5 sm:gap-3 cursor-pointer shadow-[0_6px_22px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_30px_rgba(0,168,158,0.4)] hover:-translate-y-0.5 group"
+                      className="px-6 sm:px-9 py-3 sm:py-4 min-h-[46px] sm:min-h-[58px] bg-[#111816] hover:bg-[#00A89E] text-white text-[16px] font-semibold rounded-full transition-all duration-300 inline-flex items-center justify-center gap-2.5 sm:gap-3 cursor-pointer shadow-[0_6px_22px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_30px_rgba(0,168,158,0.4)] hover:-translate-y-0.5 group"
                     >
                       <span>Set Appointment</span>
                       <ArrowUpRight className="w-3.5 h-3.5 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -607,25 +610,25 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
                   </div>
                 </div>
 
-                {/* Bottom Feature Stats Strip (Reference Style with rounded icon boxes) */}
-                <div className="w-full pt-5 sm:pt-8 lg:pt-10 border-t border-black/8 grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-4 lg:gap-6 mt-7 sm:mt-8 lg:mt-12">
+                {/* Bottom Feature Stats Strip: Strict 2-column on mobile with matching dimensions & alignment */}
+                <div className="w-full pt-4 sm:pt-8 lg:pt-10 border-t border-black/8 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8 lg:mt-12">
                   {featureItems.map((item, idx) => {
                     const Icon = item.icon;
                     return (
                       <div
                         key={idx}
-                        className={`flex items-center gap-2.5 sm:gap-2.5 ${
+                        className={`flex items-center gap-2.5 ${
                           idx > 0 ? "sm:border-l sm:border-black/10 sm:pl-3 lg:pl-4" : ""
                         }`}
                       >
-                        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#E6F7F5] text-[#00A89E] flex items-center justify-center flex-shrink-0">
+                        <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-[#E6F7F5] text-[#00A89E] flex items-center justify-center flex-shrink-0">
                           <Icon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                         </div>
-                        <div className="flex flex-col min-w-0">
-                          <span className="text-[11.5px] sm:text-[13px] font-bold text-[#111816] uppercase tracking-tight leading-tight whitespace-nowrap">
+                        <div className="flex flex-col min-w-0 justify-center">
+                          <span className="text-[16px] xs:text-[17px] font-bold text-[#111816] uppercase tracking-tight leading-tight whitespace-nowrap truncate">
                             {item.stat}
                           </span>
-                          <span className="text-[9.5px] sm:text-[11px] text-[#5A6B66] font-medium leading-tight mt-0.5 whitespace-nowrap">
+                          <span className="text-xs sm:text-[13px] text-[#334155] font-semibold leading-tight mt-0.5 whitespace-nowrap truncate">
                             {item.label}
                           </span>
                         </div>
@@ -659,34 +662,34 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
                   {/* 2. Independent Care Feature Card Component */}
                   <div
                     ref={floatingBadgeRef}
-                    className="absolute top-[35%] left-5 sm:left-7 z-30 max-w-[210px] sm:max-w-[230px] rounded-2xl bg-white/80 backdrop-blur-xl border border-white/80 p-4 shadow-[0_16px_36px_rgba(0,0,0,0.12)] transition-transform duration-500 hover:scale-105 opacity-0 will-change-[transform,opacity]"
+                    className="absolute top-[35%] left-5 sm:left-7 z-30 max-w-[220px] sm:max-w-[240px] rounded-2xl bg-white/95 backdrop-blur-xl border border-white/80 p-4 shadow-[0_16px_36px_rgba(0,0,0,0.12)] transition-transform duration-500 hover:scale-105 opacity-0 will-change-[transform,opacity]"
                   >
-                    <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-black/10">
+                    <div className="flex items-center justify-between pb-2 mb-2 border-b border-black/10">
                       <div className="flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-full bg-[#EF4444]/80" />
                         <span className="w-2 h-2 rounded-full bg-[#F59E0B]/80" />
                         <span className="w-2 h-2 rounded-full bg-[#10B981]/80" />
                       </div>
-                      <span className="text-[10px] font-semibold text-[#5A6B66] uppercase tracking-wider">
+                      <span className="text-[11px] font-bold text-[#008C84] uppercase tracking-wider">
                         Care Feature
                       </span>
                     </div>
 
-                    <h4 className="text-sm font-serif font-bold text-[#111816] leading-tight">
+                    <h4 className="text-[15px] font-serif font-bold text-[#111816] leading-tight">
                       Glowing Smile
                     </h4>
-                    <p className="text-[11px] text-[#5A6B66] mt-0.5 font-medium">
+                    <p className="text-xs text-[#334155] mt-0.5 font-medium">
                       Laser Tech & Whitening
                     </p>
 
                     <div className="grid grid-cols-2 gap-2 mt-3 pt-2.5 border-t border-black/5">
                       <div className="flex flex-col">
-                        <span className="text-[9px] text-[#718096] uppercase font-medium">Treatment</span>
-                        <span className="text-[11px] font-bold text-[#111816]">Painless</span>
+                        <span className="text-[10px] text-[#475569] uppercase font-bold tracking-wider">Treatment</span>
+                        <span className="text-xs font-bold text-[#111816]">Painless</span>
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-[9px] text-[#718096] uppercase font-medium">Comfort</span>
-                        <span className="text-[11px] font-bold text-[#111816]">Boutique</span>
+                        <span className="text-[10px] text-[#475569] uppercase font-bold tracking-wider">Comfort</span>
+                        <span className="text-xs font-bold text-[#111816]">Boutique</span>
                       </div>
                     </div>
                   </div>
@@ -714,15 +717,15 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           <div className="container-inner flex-1 flex flex-col justify-center my-auto">
             {/* Section Header: Spans the top of Section 2 with matching Hero left padding */}
             <div ref={diagHeaderRef} className="flex flex-col items-start gap-1 sm:gap-2 mb-3 sm:mb-6 max-w-3xl">
-            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#00A89E] block">
+            <span className="text-xs sm:text-[13px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-[#008C84] block">
               PATIENT CARE GUIDE
             </span>
 
-            <h2 className="text-2xl sm:text-4xl lg:text-[44px] xl:text-[48px] font-serif text-[#111816] font-medium leading-[1.1] sm:leading-[1.08] tracking-tight">
+            <h2 className="text-[30px] xs:text-[34px] sm:text-4xl lg:text-[44px] xl:text-[48px] font-serif text-[#111816] font-medium leading-[1.1] sm:leading-[1.08] tracking-tight">
               What brings you <span className="italic font-medium text-[#00A89E]">to our clinic today?</span>
             </h2>
 
-            <p className="text-xs sm:text-base md:text-[17px] text-[#4A5568] font-sans font-normal leading-relaxed max-w-xl hidden sm:block">
+            <p className="text-sm sm:text-base md:text-[17px] text-[#334155] font-sans font-normal leading-relaxed max-w-xl hidden sm:block">
               Choose your primary concern below. We&apos;ll match you with the right specialist and prepare a gentle, personalized care plan.
             </p>
           </div>
@@ -744,9 +747,9 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
                     key={item.id}
                     onClick={() => handleRowClick(item)}
                     onMouseEnter={() => handleMouseEnterCard(idx)}
-                    className={`relative w-full py-2.5 sm:py-3.5 px-3.5 sm:px-5 rounded-xl sm:rounded-2xl border text-left flex items-center justify-between gap-3 sm:gap-4 transition-all duration-300 cursor-pointer overflow-hidden ${
+                    className={`relative w-full py-2.5 sm:py-3.5 px-3.5 sm:px-5 rounded-xl sm:rounded-2xl border text-left flex items-center justify-between gap-3 sm:gap-4 transition-all duration-300 cursor-pointer overflow-hidden box-border ${
                       isActive
-                        ? "bg-white border-[#00A89E] shadow-[0_8px_24px_rgba(0,168,158,0.16)] ring-1 ring-[#00A89E]/40 translate-x-1"
+                        ? "bg-white border-[#00A89E] shadow-[0_8px_24px_rgba(0,168,158,0.16)] ring-1 ring-[#00A89E]/40"
                         : "bg-white/95 backdrop-blur-md border-black/8 hover:border-[#00A89E]/40 hover:bg-white shadow-xs"
                     }`}
                   >
@@ -757,7 +760,7 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
                       />
                     )}
 
-                    <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+                    <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1">
                       <div
                         className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${
                           isActive
@@ -768,15 +771,15 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
                         <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </div>
 
-                      <div className="flex flex-col min-w-0">
+                      <div className="flex flex-col min-w-0 flex-1 justify-center">
                         <span
-                          className={`text-xs sm:text-base font-serif font-semibold tracking-tight transition-colors duration-200 truncate ${
-                            isActive ? "text-[#00A89E]" : "text-[#111816]"
+                          className={`text-[17px] xs:text-[18px] sm:text-[16.5px] font-serif font-bold tracking-tight transition-colors duration-200 truncate ${
+                            isActive ? "text-[#008C84]" : "text-[#111816]"
                           }`}
                         >
                           {item.title}
                         </span>
-                        <span className="text-[10px] sm:text-[13px] text-[#5A6B66] font-normal mt-0.5 truncate">
+                        <span className="text-[14px] xs:text-[15px] sm:text-[13.5px] text-[#334155] font-medium leading-snug mt-0.5 truncate">
                           {item.subtitle}
                         </span>
                       </div>
@@ -784,13 +787,13 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
 
                     <div className="flex items-center gap-2 flex-shrink-0">
                       {isActive && (
-                        <span className="hidden sm:inline-block text-[11px] font-semibold text-[#00A89E] bg-[#E6F7F5] px-2.5 py-1 rounded-md">
+                        <span className="hidden sm:inline-block text-xs font-bold text-[#008C84] bg-[#E6F7F5] px-2.5 py-1 rounded-md">
                           Selected
                         </span>
                       )}
                       <ChevronRight
                         className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-all duration-300 ${
-                          isActive ? "text-[#00A89E] translate-x-1" : "text-[#A0AEC0]"
+                          isActive ? "text-[#00A89E]" : "text-[#94A3B8]"
                         }`}
                       />
                     </div>
@@ -829,15 +832,15 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
                   <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
                     <div className="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full border border-black/5 shadow-xs">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#00A89E] animate-pulse" />
-                      <span className="text-[10px] font-bold text-[#111816] tracking-wider uppercase">
+                      <span className="text-[11px] font-bold text-[#111816] tracking-wider uppercase">
                         Care Overview
                       </span>
                     </div>
 
-                    <div className="bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full border border-black/5 text-[#111816] text-[11px] font-semibold tracking-wider shadow-xs">
-                      <span className="text-[#00A89E]">0{activeIndex + 1}</span>
+                    <div className="bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full border border-black/5 text-[#111816] text-xs font-bold tracking-wider shadow-xs">
+                      <span className="text-[#008C84]">0{activeIndex + 1}</span>
                       <span className="opacity-40 mx-0.5">/</span>
-                      <span className="opacity-60">0{concerns.length}</span>
+                      <span className="opacity-70">0{concerns.length}</span>
                     </div>
                   </div>
                 </div>
@@ -846,22 +849,22 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
                 <div className="flex flex-col justify-between flex-1">
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-2">
-                      <span className="text-[10.5px] font-bold uppercase tracking-wider text-[#00A89E] bg-[#E6F7F5] px-2.5 py-1 rounded-md">
+                      <span className="text-xs font-bold uppercase tracking-wider text-[#008C84] bg-[#E6F7F5] px-2.5 py-1 rounded-md">
                         {activeConcern.tag}
                       </span>
-                      <div className="flex items-center gap-1.5 text-xs text-[#5A6B66] font-medium">
-                        <Clock className="w-3.5 h-3.5 text-[#00A89E]" />
+                      <div className="flex items-center gap-1.5 text-xs sm:text-[13px] text-[#334155] font-semibold">
+                        <Clock className="w-4 h-4 text-[#00A89E]" />
                         <span>{activeConcern.timeframe}</span>
                       </div>
                     </div>
 
-                    <h3 className="text-lg sm:text-xl font-serif font-medium text-[#111816] leading-snug mb-2">
+                    <h3 className="text-xl sm:text-[22px] font-serif font-bold text-[#111816] leading-snug mb-2">
                       {activeConcern.treatment}
                     </h3>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mb-3">
                       {activeConcern.highlights.map((highlight, hIdx) => (
-                        <div key={hIdx} className="flex items-center gap-2 text-xs sm:text-[13px] text-[#2D3748]">
+                        <div key={hIdx} className="flex items-center gap-2 text-xs sm:text-[13.5px] text-[#1E293B] font-medium">
                           <CheckCircle2 className="w-4 h-4 text-[#00A89E] flex-shrink-0" />
                           <span className="truncate">{highlight}</span>
                         </div>
@@ -871,7 +874,7 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
 
                   <button
                     onClick={() => handleRowClick(activeConcern)}
-                    className="w-full py-3 px-6 min-h-[44px] bg-[#00A89E] hover:bg-[#008C84] text-white text-xs sm:text-sm font-semibold rounded-xl transition-all duration-300 inline-flex items-center justify-center gap-2.5 cursor-pointer shadow-[0_4px_16px_rgba(0,168,158,0.28)] hover:shadow-[0_6px_22px_rgba(0,168,158,0.4)] hover:-translate-y-[0.5px]"
+                    className="w-full py-3.5 px-6 min-h-[46px] bg-[#00A89E] hover:bg-[#008C84] text-white text-xs sm:text-sm font-bold rounded-xl transition-all duration-300 inline-flex items-center justify-center gap-2.5 cursor-pointer shadow-[0_4px_16px_rgba(0,168,158,0.28)] hover:shadow-[0_6px_22px_rgba(0,168,158,0.4)] hover:-translate-y-[0.5px]"
                   >
                     <span>Book Consultation for This Care</span>
                     <ArrowRight className="w-4 h-4" />
@@ -913,7 +916,6 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           ref={overlapPanelRef}
           id="overlap-panel-wrapper"
           className="relative lg:absolute lg:inset-0 w-full h-auto lg:min-h-screen z-30 lg:z-40 transform-gpu [backface-visibility:hidden] [perspective:1000px] [-webkit-font-smoothing:antialiased]"
-          style={{ transform: "translateZ(0)" }}
         >
           {children}
         </div>
@@ -922,13 +924,13 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
       {/* Fixed Scroll to Explore indicator (Desktop only) */}
       <div
         ref={scrollPromptRef}
-        className="hidden lg:flex fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex-col items-center gap-1.5 opacity-70 hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        className="hidden lg:flex fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex-col items-center gap-1.5 opacity-85 hover:opacity-100 transition-opacity duration-300 pointer-events-none"
         aria-hidden="true"
       >
-        <div className="w-4 h-7 rounded-full border border-black/40 flex justify-center pt-1.5">
+        <div className="w-4 h-7 rounded-full border border-black/50 flex justify-center pt-1.5">
           <div className="w-1 h-1.5 bg-[#00A89E] rounded-full animate-bounce" />
         </div>
-        <span className="text-[9px] tracking-[0.3em] uppercase text-[#111816]/70 font-semibold">
+        <span className="text-[11px] tracking-[0.16em] uppercase text-[#111816] font-bold">
           SCROLL TO EXPLORE
         </span>
       </div>

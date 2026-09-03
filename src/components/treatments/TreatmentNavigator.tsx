@@ -148,13 +148,13 @@ export default function TreatmentNavigator() {
         <div className="container-inner">
           {/* Header */}
           <div className="mb-10">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#00A89E] block mb-2">
+          <span className="text-xs sm:text-[13px] font-bold uppercase tracking-[0.16em] text-[#008C84] block mb-2">
             TREATMENT NAVIGATOR
           </span>
           <h2 className="text-4xl sm:text-5xl lg:text-[54px] font-serif text-[#111816] font-medium leading-[1.08] tracking-tight mb-3">
             Clinical Specialties & Offerings
           </h2>
-          <p className="text-base sm:text-lg text-[#4A5568] font-sans font-normal leading-relaxed max-w-2xl">
+          <p className="text-base sm:text-lg text-[#334155] font-sans font-normal leading-relaxed max-w-2xl">
             Select a discipline below to discover diagnostic approaches and estimated timelines.
           </p>
         </div>
@@ -167,10 +167,10 @@ export default function TreatmentNavigator() {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-6 py-2.5 min-h-[40px] rounded-full text-xs sm:text-sm font-semibold tracking-wider transition-all duration-300 inline-flex items-center justify-center cursor-pointer leading-normal ${
+                className={`px-6 py-2.5 min-h-[40px] rounded-full text-xs sm:text-sm font-bold tracking-wider transition-all duration-300 inline-flex items-center justify-center cursor-pointer leading-normal ${
                   isActive
                     ? "bg-[#00A89E] text-white shadow-[0_4px_16px_rgba(0,168,158,0.28)]"
-                    : "bg-white/90 border border-black/8 text-[#4A5568] hover:text-[#111816] hover:border-black/20 shadow-sm hover:bg-white"
+                    : "bg-white/90 border border-black/8 text-[#334155] hover:text-[#111816] hover:border-black/20 shadow-sm hover:bg-white"
                 }`}
               >
                 {cat}
@@ -201,21 +201,21 @@ export default function TreatmentNavigator() {
               {/* Content */}
               <div className="p-6 flex flex-col flex-1 justify-between">
                 <div>
-                  <h3 className="text-xl font-serif font-semibold text-[#111816] group-hover:text-[#00A89E] transition-colors mb-2">
+                  <h3 className="text-xl font-serif font-bold text-[#111816] group-hover:text-[#008C84] transition-colors mb-2">
                     {card.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-[#4A5568] leading-relaxed mb-6">
+                  <p className="text-sm text-[#334155] leading-relaxed mb-6 font-normal">
                     {card.description}
                   </p>
                 </div>
 
                 {/* Footer / Timeline */}
                 <div className="pt-4 border-t border-black/8 flex items-center justify-between">
-                  <span className="text-[11px] text-[#00A89E] font-semibold">
+                  <span className="text-xs sm:text-[13px] text-[#008C84] font-bold">
                     Timeline: {card.timeline}
                   </span>
-                  <div className="w-7 h-7 rounded-full bg-[#E6F7F5] group-hover:bg-[#00A89E] group-hover:text-white text-[#00A89E] flex items-center justify-center transition-all duration-300">
-                    <ArrowRight className="w-3.5 h-3.5" />
+                  <div className="w-8 h-8 rounded-full bg-[#E6F7F5] group-hover:bg-[#00A89E] group-hover:text-white text-[#00A89E] flex items-center justify-center transition-all duration-300">
+                    <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
               </div>
@@ -227,10 +227,10 @@ export default function TreatmentNavigator() {
         <div className="text-center">
           <a
             href="#diagnostics"
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#00A89E] hover:text-[#008C84] font-semibold transition-colors group"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-[#008C84] hover:text-[#005f59] font-bold transition-colors group"
           >
             <span>View All Treatments</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </a>
           </div>
         </div>

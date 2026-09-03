@@ -21,7 +21,7 @@ export default function Home() {
       <CinematicHeroSequence>
         <div
           id="stack-authority"
-          className="relative z-30 lg:z-40 rounded-none lg:rounded-t-[36px] bg-[#FFFFF0] shadow-[0_-16px_50px_rgba(0,0,0,0.12),0_-2px_16px_rgba(0,0,0,0.06)] overflow-hidden min-h-screen transform-gpu [backface-visibility:hidden] [-webkit-font-smoothing:antialiased]"
+          className="relative z-30 lg:z-40 rounded-none lg:rounded-t-[36px] bg-[#FFFFF0] shadow-[0_-16px_50px_rgba(0,0,0,0.12),0_-2px_16px_rgba(0,0,0,0.06)] overflow-hidden min-h-0 lg:min-h-screen transform-gpu [backface-visibility:hidden] [-webkit-font-smoothing:antialiased]"
           style={{
             transform: "translateZ(0)",
           }}

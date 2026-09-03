@@ -30,40 +30,40 @@ export default function Footer() {
                 />
               </div>
             </Link>
-            <p className="text-xs text-[#4A5568] max-w-xs leading-relaxed mt-1">
+            <p className="text-sm text-[#334155] max-w-xs leading-relaxed mt-1 font-normal">
               Advanced dental care combining precision technology, specialist expertise, and boutique patient-first comfort.
             </p>
           </div>
 
           {/* Quick Links */}
           <div className="md:col-span-2">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#00A89E] mb-4">Explore</h4>
-            <ul className="flex flex-col gap-2.5 text-xs text-[#4A5568]">
-              <li><Link href="/" className="hover:text-[#00A89E] transition-colors">Home</Link></li>
-              <li><a href="#treatments" className="hover:text-[#00A89E] transition-colors">Treatments</a></li>
-              <li><a href="#smile-plan" className="hover:text-[#00A89E] transition-colors">Smile Plan</a></li>
-              <li><a href="#nri-tourism" className="hover:text-[#00A89E] transition-colors">NRI Tourism</a></li>
-              <li><Link href="/blog" className="hover:text-[#00A89E] transition-colors">Blog</Link></li>
+            <h4 className="text-xs font-bold uppercase tracking-[0.16em] text-[#008C84] mb-4">Explore</h4>
+            <ul className="flex flex-col gap-3 text-sm text-[#334155]">
+              <li><Link href="/" className="hover:text-[#00A89E] transition-colors font-medium">Home</Link></li>
+              <li><a href="#treatments" className="hover:text-[#00A89E] transition-colors font-medium">Treatments</a></li>
+              <li><a href="#smile-plan" className="hover:text-[#00A89E] transition-colors font-medium">Smile Plan</a></li>
+              <li><a href="#nri-tourism" className="hover:text-[#00A89E] transition-colors font-medium">NRI Tourism</a></li>
+              <li><Link href="/blog" className="hover:text-[#00A89E] transition-colors font-medium">Blog</Link></li>
             </ul>
           </div>
 
           {/* Services */}
           <div className="md:col-span-3">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#00A89E] mb-4">Specialties</h4>
-            <ul className="flex flex-col gap-2.5 text-xs text-[#4A5568]">
-              <li><a href="#treatments" className="hover:text-[#00A89E] transition-colors">Dental Implants</a></li>
-              <li><a href="#treatments" className="hover:text-[#00A89E] transition-colors">Porcelain Veneers</a></li>
-              <li><a href="#treatments" className="hover:text-[#00A89E] transition-colors">Clear Aligners</a></li>
-              <li><a href="#treatments" className="hover:text-[#00A89E] transition-colors">Microscopic Root Canal</a></li>
+            <h4 className="text-xs font-bold uppercase tracking-[0.16em] text-[#008C84] mb-4">Specialties</h4>
+            <ul className="flex flex-col gap-3 text-sm text-[#334155]">
+              <li><a href="#treatments" className="hover:text-[#00A89E] transition-colors font-medium">Dental Implants</a></li>
+              <li><a href="#treatments" className="hover:text-[#00A89E] transition-colors font-medium">Porcelain Veneers</a></li>
+              <li><a href="#treatments" className="hover:text-[#00A89E] transition-colors font-medium">Clear Aligners</a></li>
+              <li><a href="#treatments" className="hover:text-[#00A89E] transition-colors font-medium">Microscopic Root Canal</a></li>
             </ul>
           </div>
 
           {/* Contact */}
           <div className="md:col-span-3">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#00A89E] mb-4">Contact</h4>
-            <ul className="flex flex-col gap-2.5 text-xs text-[#4A5568]">
+            <h4 className="text-xs font-bold uppercase tracking-[0.16em] text-[#008C84] mb-4">Contact</h4>
+            <ul className="flex flex-col gap-3 text-sm text-[#334155]">
               <li>
-                <a href={`tel:${clinic.phoneRaw}`} onClick={handlePhoneClick} className="hover:text-[#00A89E] transition-colors font-medium">
+                <a href={`tel:${clinic.phoneRaw}`} onClick={handlePhoneClick} className="hover:text-[#008C84] transition-colors font-semibold">
                   {clinic.phone}
                 </a>
               </li>
@@ -73,17 +73,17 @@ export default function Footer() {
                   onClick={handleWhatsappClick}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-[#00A89E] transition-colors font-medium"
+                  className="hover:text-[#008C84] transition-colors font-semibold"
                 >
                   WhatsApp Chat
                 </a>
               </li>
               <li>
-                <a href={`mailto:${clinic.email}`} className="hover:text-[#00A89E] transition-colors">
+                <a href={`mailto:${clinic.email}`} className="hover:text-[#008C84] transition-colors font-semibold">
                   {clinic.email}
                 </a>
               </li>
-              <li className="text-[#718096] text-[11px] mt-1 leading-relaxed">
+              <li className="text-[#475569] text-xs mt-1 leading-relaxed font-medium">
                 {clinic.address}, {clinic.city}
               </li>
             </ul>
@@ -91,11 +91,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 border-t border-black/8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#718096]">
+        <div className="pt-8 border-t border-black/8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#475569] font-medium">
           <span>© {new Date().getFullYear()} AnjMohi Dental Clinic. All rights reserved.</span>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-[#00A89E] transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-[#00A89E] transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-[#008C84] transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-[#008C84] transition-colors">Terms of Service</a>
           </div>
         </div>
         </div>
