@@ -1,16 +1,30 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { blogPosts } from "@/data/blog";
+import { blogPosts as fallbackPosts, BlogPost } from "@/data/blog";
 import { ArrowLeft, Calendar, User, Clock } from "lucide-react";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+async function getBlogPost(slug: string): Promise<BlogPost | null> {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5005";
+  try {
+    const res = await fetch(`${apiUrl}/api/blogs/dental/${slug}`, {
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      if (json.data) return json.data;
+    }
+  } catch (err) {}
+  return fallbackPosts.find((p) => p.slug === slug) || null;
+}
+
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug);
+  const post = await getBlogPost(slug);
   if (!post) return {};
 
   return {
@@ -21,16 +35,17 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug);
+  const post = await getBlogPost(slug);
   if (!post) {
     notFound();
   }
+
+  const paragraphs = (post.content || "").split(/\n\s*\n/);
 
   return (
     <article className="pt-32 sm:pt-36 pb-24 relative bg-[#FFFFF0] min-h-screen text-[#111816]">
       <div className="container-editorial">
         <div className="container-inner max-w-4xl">
-          
           {/* Back Link */}
           <div className="mb-8">
             <Link
@@ -68,19 +83,31 @@ export default async function BlogPostPage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Content body with custom styling */}
+          {/* Featured Image */}
+          {post.image && (
+            <div className="relative w-full h-[260px] sm:h-[420px] rounded-2xl overflow-hidden mb-10 border border-black/8 bg-slate-100">
+              <img
+                src={post.image}
+                alt={post.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
+
+          {/* Content body */}
           <div className="text-base md:text-lg text-[#1E293B] leading-relaxed flex flex-col gap-6 pt-2 font-sans">
-            {post.content.split("\n\n").map((paragraph, index) => {
+            {paragraphs.map((paragraph, index) => {
               const trimmed = paragraph.trim();
+              if (!trimmed) return null;
               if (trimmed.startsWith("###")) {
                 return (
                   <h3 key={index} className="text-xl sm:text-2xl md:text-3xl font-serif text-[#111816] font-bold mt-6 mb-1 leading-snug">
-                    {trimmed.replace("###", "").trim()}
+                    {trimmed.replace(/^###\s*/, "")}
                   </h3>
                 );
               }
               return (
-                <p key={index} className="text-[#334155] leading-relaxed font-normal">
+                <p key={index} className="text-[#334155] leading-relaxed font-normal whitespace-pre-line">
                   {trimmed}
                 </p>
               );
@@ -88,14 +115,15 @@ export default async function BlogPostPage({ params }: PageProps) {
           </div>
 
           {/* Tags */}
-          <div className="flex flex-wrap gap-2 mt-12 pt-6 border-t border-black/8">
-            {post.tags.map((tag) => (
-              <span key={tag} className="text-xs font-bold bg-white text-[#334155] border border-black/8 px-3 py-1.5 rounded-lg shadow-2xs">
-                #{tag}
-              </span>
-            ))}
-          </div>
-
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-12 pt-6 border-t border-black/8">
+              {post.tags.map((tag, tagIdx) => (
+                <span key={`${tag}-${tagIdx}`} className="text-xs font-bold bg-white text-[#334155] border border-black/8 px-3 py-1.5 rounded-lg shadow-2xs">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </article>

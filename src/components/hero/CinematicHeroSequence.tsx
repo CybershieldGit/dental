@@ -466,10 +466,6 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
     return () => {
       window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimer);
-      const pinTrigger = ScrollTrigger.getById("hero-pin-trigger");
-      if (pinTrigger) {
-        pinTrigger.kill(true);
-      }
       if (ctx) ctx.revert();
     };
   }, []);
@@ -501,10 +497,11 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
   const activeConcern = concerns[activeIndex];
 
   return (
-    <div
-      ref={triggerContainerRef}
-      className="relative w-full overflow-visible lg:h-screen lg:overflow-hidden select-none bg-transparent"
-    >
+    <div className="relative w-full">
+      <div
+        ref={triggerContainerRef}
+        className="relative w-full overflow-visible lg:h-screen lg:overflow-hidden select-none bg-transparent"
+      >
       {/* ─────────────────────────────────────────────────────────
           BACKGROUND LAYER: FIXED HERO IMAGE (Mobile & Desktop)
           Sits behind Section 1 and Section 2
@@ -934,6 +931,7 @@ export default function CinematicHeroSequence({ children }: { children?: React.R
           SCROLL TO EXPLORE
         </span>
       </div>
+    </div>
     </div>
   );
 }

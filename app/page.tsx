@@ -14,21 +14,21 @@ export default function Home() {
     <>
 
       {/* ─────────────────────────────────────────────────
-          SECTIONS 1, 2 & 3: CINEMATIC SEQUENCE + OVERLAP
-          Hero expands -> fixed background -> Section 2 reveals.
-          Then Section 3 (Success Stories) slides up and overlaps Section 2.
+          SECTIONS 1 & 2: CINEMATIC SEQUENCE
+          Hero expands -> fixed background -> Section 2 (Diagnostics) reveals.
           ───────────────────────────────────────────────── */}
-      <CinematicHeroSequence>
-        <div
-          id="stack-authority"
-          className="relative z-30 lg:z-40 rounded-none lg:rounded-t-[36px] bg-[#FFFFF0] shadow-[0_-16px_50px_rgba(0,0,0,0.12),0_-2px_16px_rgba(0,0,0,0.06)] overflow-hidden min-h-0 lg:min-h-screen transform-gpu [backface-visibility:hidden] [-webkit-font-smoothing:antialiased]"
-          style={{
-            transform: "translateZ(0)",
-          }}
-        >
-          <CaseStudy />
-        </div>
-      </CinematicHeroSequence>
+      <CinematicHeroSequence />
+
+      {/* ─────────────────────────────────────────────────
+          SECTION 3: VERIFIED SUCCESS STORIES & BEFORE-AFTER
+          Interactive before/after smile comparison slider
+          ───────────────────────────────────────────────── */}
+      <div
+        id="cases"
+        className="relative z-20 bg-[#FFFFF0] shadow-[0_-16px_50px_rgba(0,0,0,0.06)]"
+      >
+        <CaseStudy />
+      </div>
 
       {/* ─────────────────────────────────────────────────
           SECTIONS 4–8: 100% NORMAL DOCUMENT FLOW

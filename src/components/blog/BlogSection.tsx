@@ -1,73 +1,129 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Clock, Calendar, User, BookOpen, Sparkles } from "lucide-react";
 
+interface BlogItem {
+  id: string;
+  slug: string;
+  tag: string;
+  badge: string;
+  title: string;
+  excerpt: string;
+  fullSummary: string;
+  readTime: string;
+  date: string;
+  author: string;
+  image: string;
+  keyTakeaways: string[];
+}
+
+const defaultBlogs: BlogItem[] = [
+  {
+    id: "blog-1",
+    slug: "navigating-your-invisalign-journey",
+    tag: "Orthodontics",
+    badge: "ALIGNERS",
+    title: "Clear Aligners vs Braces: Which is Right for You?",
+    excerpt: "A comprehensive orthodontic guide comparing digital clear aligners with traditional bracket systems to help you choose the ideal pathway for your smile.",
+    fullSummary: "Discover the key clinical differences between custom clear aligners and conventional orthodontics. We analyze treatment duration, aesthetic visibility, lifestyle flexibility, hygiene maintenance, and cost considerations to empower your decision.",
+    readTime: "5 min read",
+    date: "Aug 18, 2026",
+    author: "Dr. Kevin Mathew",
+    image: "/images/blog-invisalign.jpg",
+    keyTakeaways: ["Virtually invisible aligner trays", "Removable for meals and oral hygiene", "3D digital smile simulation"],
+  },
+  {
+    id: "blog-2",
+    slug: "demystifying-dental-implants-process",
+    tag: "Implantology",
+    badge: "IMPLANTS",
+    title: "Everything You Need to Know Before Dental Implants",
+    excerpt: "Step-by-step clinical breakdown of guided 3D titanium implant surgery, bone grafting options, and immediate-load restoration.",
+    fullSummary: "Dental implants are the gold standard for replacing missing teeth. Learn about the complete surgical timeline, CT bone density evaluation, 3D surgical guides, recovery timelines, and lifetime maintenance protocols from our chief implantologist.",
+    readTime: "6 min read",
+    date: "Aug 12, 2026",
+    author: "Dr. Ananya Sharma",
+    image: "/images/blog-implants.jpg",
+    keyTakeaways: ["Titanium osseointegration technology", "Permanent chew and speech restoration", "Preserves natural facial bone volume"],
+  },
+  {
+    id: "blog-3",
+    slug: "truth-about-gum-disease",
+    tag: "Periodontics",
+    badge: "ORAL CARE",
+    title: "The Truth About Gum Disease & Prevention",
+    excerpt: "Early warning signs of gingivitis and periodontitis, laser therapy solutions, and evidence-based daily routines for healthy gums.",
+    fullSummary: "Periodontal disease is often silent and pain-free in early stages. We explore how bacterial plaque hardens into tartar, the role of ultrasonic deep scaling, painless laser gum therapy, and proven at-home habits to reverse early inflammation.",
+    readTime: "4 min read",
+    date: "Aug 08, 2026",
+    author: "Dr. Karan Anand",
+    image: "/images/blog-gum-disease.jpg",
+    keyTakeaways: ["Early detection stops bone loss", "Minimally invasive laser therapy", "Daily flossing and ultrasonic care"],
+  },
+  {
+    id: "blog-4",
+    slug: "precision-diagnostics-with-ai",
+    tag: "Technology",
+    badge: "AI & 3D CBCT",
+    title: "Precision Diagnostics with AI & 3D Imaging",
+    excerpt: "How 3D cone beam computed tomography and artificial intelligence are revolutionizing dental diagnostics and painless treatment planning.",
+    fullSummary: "Explore how our clinic leverages sub-millimeter 3D CBCT imaging and neural network diagnostic algorithms to detect hidden micro-fractures, nerve canal pathways, and early interproximal caries before symptoms occur.",
+    readTime: "5 min read",
+    date: "Aug 02, 2026",
+    author: "Dr. Karan Mehta",
+    image: "/images/blog-dental-checkup.jpg",
+    keyTakeaways: ["Sub-millimeter 3D anatomical accuracy", "Early AI pathology detection", "Zero-guesswork computer-guided plans"],
+  },
+];
+
 export default function BlogSection() {
+  const [blogsList, setBlogsList] = useState<BlogItem[]>(defaultBlogs);
   const [activeBlogIdx, setActiveBlogIdx] = useState(0);
 
-  const blogsList = [
-    {
-      id: "blog-1",
-      slug: "navigating-your-invisalign-journey",
-      tag: "Orthodontics",
-      badge: "ALIGNERS",
-      title: "Clear Aligners vs Braces: Which is Right for You?",
-      excerpt: "A comprehensive orthodontic guide comparing digital clear aligners with traditional bracket systems to help you choose the ideal pathway for your smile.",
-      fullSummary: "Discover the key clinical differences between custom clear aligners and conventional orthodontics. We analyze treatment duration, aesthetic visibility, lifestyle flexibility, hygiene maintenance, and cost considerations to empower your decision.",
-      readTime: "5 min read",
-      date: "Aug 18, 2026",
-      author: "Dr. Kevin Mathew",
-      image: "/images/blog-invisalign.jpg",
-      keyTakeaways: ["Virtually invisible aligner trays", "Removable for meals and oral hygiene", "3D digital smile simulation"],
-    },
-    {
-      id: "blog-2",
-      slug: "demystifying-dental-implants-process",
-      tag: "Implantology",
-      badge: "IMPLANTS",
-      title: "Everything You Need to Know Before Dental Implants",
-      excerpt: "Step-by-step clinical breakdown of guided 3D titanium implant surgery, bone grafting options, and immediate-load restoration.",
-      fullSummary: "Dental implants are the gold standard for replacing missing teeth. Learn about the complete surgical timeline, CT bone density evaluation, 3D surgical guides, recovery timelines, and lifetime maintenance protocols from our chief implantologist.",
-      readTime: "6 min read",
-      date: "Aug 12, 2026",
-      author: "Dr. Ananya Sharma",
-      image: "/images/blog-implants.jpg",
-      keyTakeaways: ["Titanium osseointegration technology", "Permanent chew and speech restoration", "Preserves natural facial bone volume"],
-    },
-    {
-      id: "blog-3",
-      slug: "truth-about-gum-disease",
-      tag: "Periodontics",
-      badge: "ORAL CARE",
-      title: "The Truth About Gum Disease & Prevention",
-      excerpt: "Early warning signs of gingivitis and periodontitis, laser therapy solutions, and evidence-based daily routines for healthy gums.",
-      fullSummary: "Periodontal disease is often silent and pain-free in early stages. We explore how bacterial plaque hardens into tartar, the role of ultrasonic deep scaling, painless laser gum therapy, and proven at-home habits to reverse early inflammation.",
-      readTime: "4 min read",
-      date: "Aug 08, 2026",
-      author: "Dr. Karan Anand",
-      image: "/images/blog-gum-disease.jpg",
-      keyTakeaways: ["Early detection stops bone loss", "Minimally invasive laser therapy", "Daily flossing and ultrasonic care"],
-    },
-    {
-      id: "blog-4",
-      slug: "precision-diagnostics-with-ai",
-      tag: "Technology",
-      badge: "AI & 3D CBCT",
-      title: "Precision Diagnostics with AI & 3D Imaging",
-      excerpt: "How 3D cone beam computed tomography and artificial intelligence are revolutionizing dental diagnostics and painless treatment planning.",
-      fullSummary: "Explore how our clinic leverages sub-millimeter 3D CBCT imaging and neural network diagnostic algorithms to detect hidden micro-fractures, nerve canal pathways, and early interproximal caries before symptoms occur.",
-      readTime: "5 min read",
-      date: "Aug 02, 2026",
-      author: "Dr. Karan Mehta",
-      image: "/images/blog-dental-checkup.jpg",
-      keyTakeaways: ["Sub-millimeter 3D anatomical accuracy", "Early AI pathology detection", "Zero-guesswork computer-guided plans"],
-    },
-  ];
+  useEffect(() => {
+    const fetchLiveBlogs = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5005";
+        const res = await fetch(`${apiUrl}/api/blogs?site=dental`, { cache: "no-store" });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data && json.data.length > 0) {
+            const mapped: BlogItem[] = json.data.map((item: any, idx: number) => {
+              const takeaways = Array.isArray(item.tags) && item.tags.length > 0
+                ? item.tags.map((t: string) => t.startsWith("#") ? t : `Clinical focus: ${t}`)
+                : ["Doctor-reviewed clinical guideline", "Evidence-based oral healthcare", "Personalized patient protocol"];
 
-  const activeBlog = blogsList[activeBlogIdx];
+              return {
+                id: item._id || `live-blog-${idx}`,
+                slug: item.slug,
+                tag: item.category || "General",
+                badge: (item.category || "CLINICAL").toUpperCase(),
+                title: item.title,
+                excerpt: item.excerpt || (item.content ? item.content.slice(0, 140) + "..." : ""),
+                fullSummary: item.excerpt || (item.content ? item.content.slice(0, 200) + "..." : ""),
+                readTime: item.readTime || "4 min read",
+                date: item.date || "Recent",
+                author: item.author || "Clinical Specialist",
+                image: item.image || "/images/blog-dental-checkup.jpg",
+                keyTakeaways: takeaways.slice(0, 3),
+              };
+            });
+            setBlogsList(mapped);
+          }
+        }
+      } catch (err) {
+        // Fallback to defaults quietly
+      }
+    };
+
+    fetchLiveBlogs();
+  }, []);
+
+  const safeIdx = activeBlogIdx < blogsList.length ? activeBlogIdx : 0;
+  const activeBlog = blogsList[safeIdx] || defaultBlogs[0];
 
   return (
     <section id="journal" className="min-h-screen flex flex-col justify-center py-12 sm:py-16 lg:py-20 relative z-10 border-t border-black/5 bg-[#FFFFF0]/40">
@@ -79,62 +135,54 @@ export default function BlogSection() {
               <span className="text-xs sm:text-[13px] font-bold uppercase tracking-[0.16em] text-[#008C84] block mb-2">
                 DENTAL JOURNAL & INSIGHTS
               </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-[44px] xl:text-[48px] font-serif text-[#111816] font-medium leading-[1.08] tracking-tight">
-                Dental Knowledge & Insights
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif text-[#111816] font-medium leading-[1.1] tracking-tight">
+                Clinical Guides & Evidence-Based Care
               </h2>
-              <p className="text-base sm:text-lg text-[#334155] font-sans font-normal leading-relaxed max-w-2xl mt-2">
-                Explore doctor-written guides on modern cosmetic dentistry, implants, and laser care.
-              </p>
             </div>
-
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 text-sm uppercase tracking-wider text-[#008C84] hover:text-[#005f59] font-bold transition-colors group self-start sm:self-end"
+              className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-[#008C84] hover:text-[#00A89E] font-bold transition-colors group self-start sm:self-auto"
             >
               <span>View All Articles</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          {/* Grid Layout: 2x2 Clean Stack Cards on Left + Generous Detail Showcase on Right */}
+          {/* Interactive Editorial Grid: Left Cards + Right Showcase */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
             
-            {/* LEFT: 2x2 Grid of 4 Blog Cards (7 cols) */}
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+            {/* LEFT: Clickable Blog Cards (7 cols) */}
+            <div className="lg:col-span-7 flex flex-col gap-3.5">
               {blogsList.map((item, idx) => {
-                const isSelected = activeBlogIdx === idx;
+                const isSelected = idx === safeIdx;
                 return (
                   <div
                     key={item.id}
                     onClick={() => setActiveBlogIdx(idx)}
-                    className={`group relative rounded-2xl sm:rounded-3xl overflow-hidden transition-all duration-300 cursor-pointer flex flex-col justify-between border ${
+                    className={`group text-left p-4 sm:p-5 rounded-2xl sm:rounded-3xl border transition-all duration-300 cursor-pointer flex flex-col sm:flex-row gap-4 sm:gap-5 items-stretch relative ${
                       isSelected
-                        ? "bg-white border-[#00A89E] shadow-[0_12px_36px_rgba(0,168,158,0.18)] ring-2 ring-[#00A89E]/20"
-                        : "bg-white/95 border-black/8 hover:border-[#00A89E]/50 hover:bg-white shadow-[0_4px_16px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
+                        ? "bg-white shadow-[0_8px_30px_rgba(0,168,158,0.12)] border-[#00A89E]/50 ring-1 ring-[#00A89E]/30"
+                        : "bg-white/80 border-black/5 hover:bg-white hover:border-black/10 hover:shadow-xs"
                     }`}
                   >
-                    {/* Top: Large Featured Image Banner */}
-                    <div className="relative w-full h-[140px] sm:h-[150px] overflow-hidden bg-slate-100 flex-shrink-0">
-                      <Image
+                    {/* Visual Media Thumbnail */}
+                    <div className="relative w-full sm:w-[130px] md:w-[150px] h-[110px] sm:h-auto rounded-xl sm:rounded-2xl overflow-hidden bg-slate-100 flex-shrink-0">
+                      <img
                         src={item.image}
                         alt={item.title}
-                        fill
-                        sizes="(max-width: 1024px) 50vw, 25vw"
-                        className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                      {/* Floating Category Tag inside image */}
-                      <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-[#008C84] bg-white/95 backdrop-blur-md shadow-xs border border-black/5">
+                      <span className="absolute top-2 left-2 bg-white/95 backdrop-blur-md px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-[#008C84] shadow-xs">
                         {item.tag}
                       </span>
-                      {/* Floating Read Time inside image */}
-                      <span className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full text-xs font-bold text-[#111816] bg-white/95 backdrop-blur-md shadow-xs border border-black/5 flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-[#00A89E]" />
+                      <span className="absolute bottom-2 left-2 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-full text-[10px] font-semibold text-white flex items-center gap-1 sm:hidden">
+                        <Clock className="w-3 h-3 text-[#00A89E]" />
                         {item.readTime}
                       </span>
                     </div>
 
                     {/* Content Body */}
-                    <div className="p-4 sm:p-5 flex flex-col justify-between flex-1">
+                    <div className="p-1 sm:p-0 flex flex-col justify-between flex-1">
                       <div>
                         <h4 className="text-[17px] sm:text-[18px] font-serif font-bold text-[#111816] group-hover:text-[#008C84] transition-colors leading-[1.3] line-clamp-2 mb-1.5">
                           {item.title}
@@ -167,12 +215,10 @@ export default function BlogSection() {
                 
                 {/* Featured Visual Image */}
                 <div className="relative w-full h-[220px] rounded-xl sm:rounded-2xl overflow-hidden border border-black/10 bg-slate-100 mb-4 group flex-shrink-0">
-                  <Image
+                  <img
                     src={activeBlog.image}
                     alt={activeBlog.title}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 40vw"
-                    className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                   />
                   <span className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-white border border-white/10 shadow-sm">
                     {activeBlog.badge}
